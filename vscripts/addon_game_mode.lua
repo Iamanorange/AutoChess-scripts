@@ -742,6 +742,20 @@ function DAC:InitGameMode()
 		[50] = {  --肉山大魔王
 			[1] = {x=4,y=7,enemy='pve_roshan'},
 		},
+		-- [55] = {  --for test
+		-- 	[1] = {x=4,y=5,enemy='chess_dr'},
+		-- 	[2] = {x=4,y=6,enemy='chess_dr'},
+		-- 	[3] = {x=4,y=7,enemy='chess_dr'},
+		-- 	[4] = {x=4,y=8,enemy='chess_dr'},
+		-- 	[5] = {x=5,y=5,enemy='chess_dr'},
+		-- 	[6] = {x=5,y=6,enemy='chess_dr'},
+		-- 	[7] = {x=5,y=7,enemy='chess_dr'},
+		-- 	[8] = {x=5,y=8,enemy='chess_dr'},
+		-- 	[9] = {x=6,y=5,enemy='chess_dr'},
+		-- 	[10] = {x=6,y=6,enemy='chess_dr'},
+		-- 	[11] = {x=6,y=7,enemy='chess_dr'},
+		-- 	[12] = {x=6,y=8,enemy='chess_dr'},
+		-- },
 	}
 	GameRules:GetGameModeEntity():SetPauseEnabled(false)
     GameRules:GetGameModeEntity():SetFogOfWarDisabled(true)
@@ -2354,9 +2368,10 @@ function StartAPrepareRound()
 
 	--50回合以后，疲劳
 	if GameRules:GetGameModeEntity().battle_round > 50 then
-		local bite_hp = GameRules:GetGameModeEntity().battle_round - 50
+		
 		for _,heroent in pairs (GameRules:GetGameModeEntity().hero) do
 			if heroent ~= nil and heroent:IsNull() == false and heroent:IsAlive() == true then
+				local bite_hp = math.floor(heroent:GetHealth() / 2) --GameRules:GetGameModeEntity().battle_round - 50
 				local after_hp = heroent:GetHealth() - bite_hp
 				if after_hp <= 0 then
 					after_hp = 0
@@ -4698,7 +4713,7 @@ function StartAPVERound()
 					end
 				end
 				Timers:CreateTimer(function()
-					if v == nil or v:IsNull() == true or v:IsAlive() == false and v.alreadywon == true then
+					if v == nil or v:IsNull() == true or v:IsAlive() == false or v.alreadywon == true then
 						return
 					end
 					ChessAI(v)
@@ -4831,7 +4846,7 @@ function StartAPVPRound()
 					end
 				end
 				Timers:CreateTimer(function()
-					if v == nil or v:IsNull() == true or v:IsAlive() == false and v.alreadywon == true then
+					if v == nil or v:IsNull() == true or v:IsAlive() == false or v.alreadywon == true then
 						return
 					end
 					ChessAI(v)
@@ -5811,13 +5826,14 @@ function ChessAI(u)
 			u:FindModifierByName("modifier_nevermore_necromastery"):SetStackCount(20)
 		end
 
-		if u:HasAbility('mars_bulwark') then
-			-- AddAbilityAndSetLevel(u,"mars_shield_passive",u:FindAbilityByName('mars_bulwark'):GetLevel())	
+		if u:HasAbility('mars_bulwark') then	
 			Timers:CreateTimer(1,function()
-				AddAbilityAndSetLevel(u,"mars_shield",u:FindAbilityByName('mars_bulwark'):GetLevel())
-				u:FindAbilityByName("mars_shield"):SetHidden(true)
+				if IsUnitExist(u) then
+					AddAbilityAndSetLevel(u,"mars_shield",u:FindAbilityByName('mars_bulwark'):GetLevel())
+					u:FindAbilityByName("mars_shield"):SetHidden(true)
 
-				StartMarsShieldCD(u)
+					StartMarsShieldCD(u)
+				end
 			end)
 		end
 
@@ -6532,9 +6548,9 @@ end
 function FindUnluckyDog190(u)
 	local unluckydog = nil
 	local try_count = 0
-	while unluckydog == nil and try_count < 10 do
+	while unluckydog == nil and try_count < 100 do
 		local uu = GameRules:GetGameModeEntity().to_be_destory_list[u.at_team_id or u.team_id][RandomInt(1,table.maxn(GameRules:GetGameModeEntity().to_be_destory_list[u.at_team_id or u.team_id]))]
-		if uu ~= nil and uu:IsNull() == false and uu:IsAlive() == true and uu.team_id ~= u.team_id and (uu:GetAbsOrigin()-u:GetAbsOrigin()):Length2D() <= 205 then
+		if uu ~= nil and uu:IsNull() == false and uu:IsAlive() == true and uu.team_id ~= u.team_id and (uu:GetAbsOrigin()-u:GetAbsOrigin()):Length2D() < 205 - uu:GetHullRadius() then
 			unluckydog = uu
 		end
 		try_count = try_count + 1
@@ -6544,7 +6560,7 @@ end
 function FindUnluckyDogRandomFriend(u)
 	local unluckydog = nil
 	local try_count = 0
-	while unluckydog == nil and try_count < 30 do
+	while unluckydog == nil and try_count < 100 do
 		local uu = GameRules:GetGameModeEntity().to_be_destory_list[u.at_team_id or u.team_id][RandomInt(1,table.maxn(GameRules:GetGameModeEntity().to_be_destory_list[u.at_team_id or u.team_id]))]
 		if uu ~= nil and uu:IsNull() == false and uu:IsAlive() == true and uu.team_id == u.team_id and uu:FindModifierByName("modifier_ogre_magi_bloodlust") == nil then
 			unluckydog = uu
@@ -8234,14 +8250,16 @@ function FindAClosestEnemyAndAttack(u)
 		if u:FindAbilityByName('mars_bulwark'):GetCooldownTimeRemaining() < 0.1 then
 			u:SwapAbilities('mars_bulwark','mars_shield', false, true)
 			Timers:CreateTimer(0.1,function()
-				ExecuteOrderFromTable({
-			 		UnitIndex = u:entindex(), 
-			 		OrderType = DOTA_UNIT_ORDER_CAST_NO_TARGET,
-			 		TargetIndex = nil, --Optional.  Only used when targeting units
-			 		AbilityIndex = u:FindAbilityByName('mars_shield'):entindex(), --Optional.  Only used when casting abilities
-			 		Position = nil, --Optional.  Only used when targeting the ground
-			 		Queue = 0 --Optional.  Used for queueing up abilities
-			 	})
+				if u:FindAbilityByName('mars_shield') ~= nil then
+					ExecuteOrderFromTable({
+				 		UnitIndex = u:entindex(), 
+				 		OrderType = DOTA_UNIT_ORDER_CAST_NO_TARGET,
+				 		TargetIndex = nil, --Optional.  Only used when targeting units
+				 		AbilityIndex = u:FindAbilityByName('mars_shield'):entindex(), --Optional.  Only used when casting abilities
+				 		Position = nil, --Optional.  Only used when targeting the ground
+				 		Queue = 0 --Optional.  Used for queueing up abilities
+				 	})
+				end
 			end)
 		else
 			ExecuteOrderFromTable({
@@ -9811,9 +9829,9 @@ function MarsShieldDamage(keys)
 	ApplyDamageInRadius({
 		caster = caster,
 		team = caster.team_id,
-		radius = 200,
+		radius = 225,
 		role = 2,
-		position = caster:GetAbsOrigin()+caster:GetForwardVector()*150,
+		position = caster:GetAbsOrigin()+caster:GetForwardVector()*175,
 		damage = damage,
 		damage_type = DAMAGE_TYPE_PHYSICAL,
 	})
@@ -9824,11 +9842,11 @@ end
 function StartMarsShieldCD(caster)
 	if caster:HasAbility("mars_bulwark") then
 		if caster:HasAbility('is_god_buff_plus') then
-			caster:FindAbilityByName("mars_bulwark"):StartCooldown(2.5)
+			caster:FindAbilityByName("mars_bulwark"):StartCooldown(2)
 		elseif caster:HasAbility('is_god_buff') then
-			caster:FindAbilityByName("mars_bulwark"):StartCooldown(5)
+			caster:FindAbilityByName("mars_bulwark"):StartCooldown(4)
 		else
-			caster:FindAbilityByName("mars_bulwark"):StartCooldown(10)
+			caster:FindAbilityByName("mars_bulwark"):StartCooldown(8)
 		end
 	end
 end
