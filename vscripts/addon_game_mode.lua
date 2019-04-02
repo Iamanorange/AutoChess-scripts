@@ -518,71 +518,294 @@ function Precache( context )
 			PrecacheResource( "soundfile",  mxx[i], context)
 		end
     end
-    PrecacheUnitByNameSync("chess_tusk", context)
-    PrecacheUnitByNameSync("chess_cm", context)
-    PrecacheUnitByNameSync("chess_axe", context)
-    PrecacheUnitByNameSync("chess_eh", context)
-    PrecacheUnitByNameSync("chess_om", context)
-    PrecacheUnitByNameSync("chess_am", context)
-    PrecacheUnitByNameSync("chess_clock", context)
-    PrecacheUnitByNameSync("chess_ss", context)
-    PrecacheUnitByNameSync("chess_bh", context)
-    PrecacheUnitByNameSync("chess_wd", context)
-    PrecacheUnitByNameSync("chess_bat", context)
-    PrecacheUnitByNameSync("chess_tk", context)
-    PrecacheUnitByNameSync("chess_bm", context)
-    PrecacheUnitByNameSync("chess_jugg", context)
-    PrecacheUnitByNameSync("chess_lyc", context)
-    PrecacheUnitByNameSync("chess_shredder", context)
-    PrecacheUnitByNameSync("chess_pa", context)
-    PrecacheUnitByNameSync("chess_puck", context)
-    PrecacheUnitByNameSync("chess_slardar", context)
-    PrecacheUnitByNameSync("chess_ck", context)
-    PrecacheUnitByNameSync("chess_luna", context)
-    PrecacheUnitByNameSync("chess_tp", context)
-    PrecacheUnitByNameSync("chess_dr", context)
-    PrecacheUnitByNameSync("chess_light", context)
-    PrecacheUnitByNameSync("chess_razor", context)
-    PrecacheUnitByNameSync("chess_ok", context)
-    PrecacheUnitByNameSync("chess_wr", context)
-    PrecacheUnitByNameSync("chess_sk", context)
-    PrecacheUnitByNameSync("chess_abaddon", context)
-    PrecacheUnitByNameSync("chess_slark", context)
-    PrecacheUnitByNameSync("chess_sniper", context)
-    PrecacheUnitByNameSync("chess_sf", context)
-    PrecacheUnitByNameSync("chess_dk", context)
-    PrecacheUnitByNameSync("chess_viper", context)
-    PrecacheUnitByNameSync("chess_kunkka", context)
-    PrecacheUnitByNameSync("chess_doom", context)
-    PrecacheUnitByNameSync("chess_lina", context)
-    PrecacheUnitByNameSync("chess_troll", context)
-    PrecacheUnitByNameSync("chess_veno", context)
-    PrecacheUnitByNameSync("chess_nec", context)
-    PrecacheUnitByNameSync("chess_ta", context)
-    PrecacheUnitByNameSync("chess_medusa", context)
-    PrecacheUnitByNameSync("chess_disruptor", context)
-    PrecacheUnitByNameSync("chess_ga", context)
-    PrecacheUnitByNameSync("chess_gyro", context)
-    PrecacheUnitByNameSync("chess_lich", context)
-    PrecacheUnitByNameSync("chess_qop", context)
-    PrecacheUnitByNameSync("chess_th", context)
-    PrecacheUnitByNameSync("chess_enigma", context)
-    PrecacheUnitByNameSync("chess_tech", context)
-    PrecacheUnitByNameSync("chess_ld", context)
-    PrecacheUnitByNameSync("chess_fur", context)
+    -- PrecacheUnitByNameSync("chess_tusk", context)
+    -- PrecacheUnitByNameSync("chess_cm", context)
+    -- PrecacheUnitByNameSync("chess_axe", context)
+    -- PrecacheUnitByNameSync("chess_eh", context)
+    -- PrecacheUnitByNameSync("chess_om", context)
+    -- PrecacheUnitByNameSync("chess_am", context)
+    -- PrecacheUnitByNameSync("chess_clock", context)
+    -- PrecacheUnitByNameSync("chess_ss", context)
+    -- PrecacheUnitByNameSync("chess_bh", context)
+    -- PrecacheUnitByNameSync("chess_wd", context)
+    -- PrecacheUnitByNameSync("chess_bat", context)
+    -- PrecacheUnitByNameSync("chess_tk", context)
+    -- PrecacheUnitByNameSync("chess_bm", context)
+    -- PrecacheUnitByNameSync("chess_jugg", context)
+    -- PrecacheUnitByNameSync("chess_lyc", context)
+    -- PrecacheUnitByNameSync("chess_shredder", context)
+    -- PrecacheUnitByNameSync("chess_pa", context)
+    -- PrecacheUnitByNameSync("chess_puck", context)
+    -- PrecacheUnitByNameSync("chess_slardar", context)
+    -- PrecacheUnitByNameSync("chess_ck", context)
+    -- PrecacheUnitByNameSync("chess_luna", context)
+    -- PrecacheUnitByNameSync("chess_tp", context)
+    -- PrecacheUnitByNameSync("chess_dr", context)
+    -- PrecacheUnitByNameSync("chess_light", context)
+    -- PrecacheUnitByNameSync("chess_razor", context)
+    -- PrecacheUnitByNameSync("chess_ok", context)
+    -- PrecacheUnitByNameSync("chess_wr", context)
+    -- PrecacheUnitByNameSync("chess_sk", context)
+    -- PrecacheUnitByNameSync("chess_abaddon", context)
+    -- PrecacheUnitByNameSync("chess_slark", context)
+    -- PrecacheUnitByNameSync("chess_sniper", context)
+    -- PrecacheUnitByNameSync("chess_sf", context)
+    -- PrecacheUnitByNameSync("chess_dk", context)
+    -- PrecacheUnitByNameSync("chess_viper", context)
+    -- PrecacheUnitByNameSync("chess_kunkka", context)
+    -- PrecacheUnitByNameSync("chess_doom", context)
+    -- PrecacheUnitByNameSync("chess_lina", context)
+    -- PrecacheUnitByNameSync("chess_troll", context)
+    -- PrecacheUnitByNameSync("chess_veno", context)
+    -- PrecacheUnitByNameSync("chess_nec", context)
+    -- PrecacheUnitByNameSync("chess_ta", context)
+    -- PrecacheUnitByNameSync("chess_medusa", context)
+    -- PrecacheUnitByNameSync("chess_disruptor", context)
+    -- PrecacheUnitByNameSync("chess_ga", context)
+    -- PrecacheUnitByNameSync("chess_gyro", context)
+    -- PrecacheUnitByNameSync("chess_lich", context)
+    -- PrecacheUnitByNameSync("chess_qop", context)
+    -- PrecacheUnitByNameSync("chess_th", context)
+    -- PrecacheUnitByNameSync("chess_enigma", context)
+    -- PrecacheUnitByNameSync("chess_tech", context)
+    -- PrecacheUnitByNameSync("chess_ld", context)
+    -- PrecacheUnitByNameSync("chess_fur", context)
 
-    PrecacheUnitByNameSync("chess_tiny", context)
-    PrecacheUnitByNameSync("chess_morph", context)
-    PrecacheUnitByNameSync("chess_tb", context)
-    PrecacheUnitByNameSync("chess_nec_ssr", context)
-    PrecacheUnitByNameSync("chess_ck_ssr", context)
+    -- PrecacheUnitByNameSync("chess_tiny", context)
+    -- PrecacheUnitByNameSync("chess_morph", context)
+    -- PrecacheUnitByNameSync("chess_tb", context)
+    -- PrecacheUnitByNameSync("chess_nec_ssr", context)
+    -- PrecacheUnitByNameSync("chess_ck_ssr", context)
 
-    PrecacheUnitByNameSync("chess_riki", context)
+    -- PrecacheUnitByNameSync("chess_riki", context)
 
-    PrecacheUnitByNameSync("chess_kael", context)
-    PrecacheUnitByNameSync("chess_zeus", context)
-    PrecacheUnitByNameSync("chess_sven", context)
-    PrecacheUnitByNameSync("chess_mars", context)
+    -- PrecacheUnitByNameSync("chess_kael", context)
+    -- PrecacheUnitByNameSync("chess_zeus", context)
+    -- PrecacheUnitByNameSync("chess_sven", context)
+    -- PrecacheUnitByNameSync("chess_mars", context)
+
+    local precache_list = {
+		chess_cm = 'cm_mana_aura',
+		chess_axe = 'axe_berserkers_call',
+		chess_dr = 'shooter_aura',
+		chess_eh = 'enchantress_natures_attendants',
+		chess_om = 'ogre_magi_bloodlust',
+		chess_tusk = 'tusk_walrus_punch',
+		chess_bm = 'beastmaster_wild_axes',
+		chess_jugg = 'juggernaut_blade_fury',
+		chess_lyc = 'lyc_wolf',
+		chess_shredder = 'shredder_whirling_death',
+		chess_tk = 'a108',
+		chess_light = 'keeper_of_the_light_illuminate',
+		chess_ok = 'omniknight_purification',
+		chess_razor = 'razor_plasma_field',
+		chess_wr = 'windrunner_powershot',
+		chess_doom = 'doom_bringer_doom',
+		chess_kunkka = 'kunkka_ghostship',
+		chess_lina = 'lina_laguna_blade',
+		chess_troll = 'troll_warlord_fervor',
+		chess_veno = 'veno_ward',
+		chess_gyro = 'gyrocopter_call_down',
+		chess_jakiro = 'jakiro_macropyre',
+		chess_lich = 'lich_chain_frost',
+		chess_qop = 'queenofpain_scream_of_pain',
+		chess_th = 'tidehunter_ravage',
+		--
+		chess_am = 'antimage_mana_break',
+		chess_bh = 'bounty_hunter_shuriken_toss',
+		chess_wd = 'witch_doctor_paralyzing_cask',
+		chess_clock = 'rattletrap_battery_assault',
+		chess_ss = 'shadow_shaman_voodoo',
+		chess_pa = 'phantom_assassin_coup_de_grace',
+		chess_puck = 'puck_illusory_orb',
+		chess_slardar = 'slardar_amplify_damage',
+		chess_ck = 'chaos_knight_chaos_bolt',
+		chess_abaddon = 'abaddon_aphotic_shield',
+		chess_sk = 'sandking_burrowstrike',
+		chess_slark = 'slark_jump',
+		chess_sniper = 'sniper_assassinate',
+		chess_nec = 'necrolyte_death_pulse',
+		chess_ta = 'templar_assassin_refraction',
+		chess_enigma = 'enigma_midnight_pulse',
+		--
+		chess_bat = 'batrider_sticky_napalm',
+		chess_luna = 'luna_moon_glaive',
+		chess_tp = 'treant_leech_seed',
+		chess_sf = 'nevermore_requiem',
+		chess_dk = 'dragon_knight_elder_dragon_form',
+		chess_viper = 'viper_viper_strike',
+		chess_medusa = 'medusa_stone_gaze',
+		chess_disruptor = 'disruptor_static_storm',
+		chess_ga = 'alchemist_chemical_rage',
+		chess_tech = 'chess_tech_bomb',
+		--
+		chess_fur = 'fur_tree',
+		chess_ld = 'ld_bear',
+		--
+		chess_nec_ssr = 'nec_ssr_scythe',
+		chess_morph = 'morphling_waveform',
+		chess_tb = 'tb_mohua',
+		chess_tiny = 'tiny_touzhi',
+		--
+		chess_riki = 'riki_smoke_screen',
+		chess_pom = 'pom_arrow_far',
+		chess_dp = 'death_prophet_exorcism',
+		--
+		chess_fv = 'faceless_void_chronosphere',
+		chess_kael = 'kael_???',
+		--
+		chess_zeus = 'zeus_thunder',
+		chess_mars = 'mars_bulwark',
+
+		chess_cm1 = 'cm_mana_aura',
+		chess_axe1 = 'axe_berserkers_call',
+		chess_dr1 = 'shooter_aura',
+		chess_eh1 = 'enchantress_natures_attendants',
+		chess_om1 = 'ogre_magi_bloodlust',
+		chess_tusk1 = 'tusk_walrus_punch',
+		chess_bm1 = 'beastmaster_wild_axes',
+		chess_jugg1 = 'juggernaut_blade_fury',
+		chess_lyc1 = 'lyc_wolf',
+		chess_shredder1 = 'shredder_whirling_death',
+		chess_tk1 = 'a108',
+		chess_light1 = 'keeper_of_the_light_illuminate',
+		chess_ok1 = 'omniknight_purification',
+		chess_razor1 = 'razor_plasma_field',
+		chess_wr1 = 'windrunner_powershot',
+		chess_doom1 = 'doom_bringer_doom',
+		chess_kunkka1 = 'kunkka_ghostship',
+		chess_lina1 = 'lina_laguna_blade',
+		chess_troll1 = 'troll_warlord_fervor',
+		chess_veno1 = 'veno_ward',
+		chess_gyro1 = 'gyrocopter_call_down',
+		chess_jakiro1 = 'jakiro_macropyre',
+		chess_lich1 = 'lich_chain_frost',
+		chess_qop1 = 'queenofpain_scream_of_pain',
+		chess_th1 = 'tidehunter_ravage',
+		--
+		chess_am1 = 'antimage_mana_break',
+		chess_bh1 = 'bounty_hunter_shuriken_toss',
+		chess_wd1 = 'witch_doctor_paralyzing_cask',
+		chess_clock1 = 'rattletrap_battery_assault',
+		chess_ss1 = 'shadow_shaman_voodoo',
+		chess_pa1 = 'phantom_assassin_coup_de_grace',
+		chess_puck1 = 'puck_illusory_orb',
+		chess_slardar1 = 'slardar_amplify_damage',
+		chess_ck1 = 'chaos_knight_chaos_bolt',
+		chess_abaddon1 = 'abaddon_aphotic_shield',
+		chess_sk1 = 'sandking_burrowstrike',
+		chess_slark1 = 'slark_jump',
+		chess_sniper1 = 'sniper_assassinate',
+		chess_nec1 = 'necrolyte_death_pulse',
+		chess_ta1 = 'templar_assassin_refraction',
+		chess_enigma1 = 'enigma_midnight_pulse',
+		--
+		chess_bat1 = 'batrider_sticky_napalm',
+		chess_luna1 = 'luna_moon_glaive',
+		chess_tp1 = 'treant_leech_seed',
+		chess_sf1 = 'nevermore_requiem',
+		chess_dk1 = 'dragon_knight_elder_dragon_form',
+		chess_viper1 = 'viper_viper_strike',
+		chess_medusa1 = 'medusa_stone_gaze',
+		chess_disruptor1 = 'disruptor_static_storm',
+		chess_ga1 = 'alchemist_chemical_rage',
+		chess_tech1 = 'chess_tech_bomb',
+		--
+		chess_fur1 = 'fur_tree',
+		chess_ld1 = 'ld_bear',
+		--
+		chess_morph1 = 'morphling_waveform',
+		chess_tb1 = 'tb_mohua',
+		chess_tiny1 = 'tiny_touzhi',
+		--
+		chess_riki1 = 'riki_smoke_screen',
+		chess_pom1 = 'pom_arrow_far',
+		chess_dp1 = 'death_prophet_exorcism',
+		--
+		chess_fv1 = 'faceless_void_chronosphere',
+		chess_kael1 = 'kael_???',
+		--
+		chess_zeus1 = 'zeus_thunder',
+		chess_mars1 = 'mars_bulwark',
+
+
+		chess_cm11 = 'cm_mana_aura',
+		chess_axe11 = 'axe_berserkers_call',
+		chess_dr11 = 'shooter_aura',
+		chess_eh11 = 'enchantress_natures_attendants',
+		chess_om11 = 'ogre_magi_bloodlust',
+		chess_tusk11 = 'tusk_walrus_punch',
+		chess_bm11 = 'beastmaster_wild_axes',
+		chess_jugg11 = 'juggernaut_blade_fury',
+		chess_lyc11 = 'lyc_wolf',
+		chess_shredder11 = 'shredder_whirling_death',
+		chess_tk11 = 'a108',
+		chess_light11 = 'keeper_of_the_light_illuminate',
+		chess_ok11 = 'omniknight_purification',
+		chess_razor11 = 'razor_plasma_field',
+		chess_wr11 = 'windrunner_powershot',
+		chess_doom11 = 'doom_bringer_doom',
+		chess_kunkka11 = 'kunkka_ghostship',
+		chess_lina11 = 'lina_laguna_blade',
+		chess_troll11 = 'troll_warlord_fervor',
+		chess_veno11 = 'veno_ward',
+		chess_gyro11 = 'gyrocopter_call_down',
+		chess_jakiro11 = 'jakiro_macropyre',
+		chess_lich11 = 'lich_chain_frost',
+		chess_qop11 = 'queenofpain_scream_of_pain',
+		chess_th11 = 'tidehunter_ravage',
+		--
+		chess_am11 = 'antimage_mana_break',
+		chess_bh11 = 'bounty_hunter_shuriken_toss',
+		chess_wd11 = 'witch_doctor_paralyzing_cask',
+		chess_clock11 = 'rattletrap_battery_assault',
+		chess_ss11 = 'shadow_shaman_voodoo',
+		chess_pa11 = 'phantom_assassin_coup_de_grace',
+		chess_puck11 = 'puck_illusory_orb',
+		chess_slardar11 = 'slardar_amplify_damage',
+		chess_ck11 = 'chaos_knight_chaos_bolt',
+		chess_abaddon11 = 'abaddon_aphotic_shield',
+		chess_sk11 = 'sandking_burrowstrike',
+		chess_slark11 = 'slark_jump',
+		chess_sniper11 = 'sniper_assassinate',
+		chess_nec11 = 'necrolyte_death_pulse',
+		chess_ta11 = 'templar_assassin_refraction',
+		chess_enigma11 = 'enigma_midnight_pulse',
+		--
+		chess_bat11 = 'batrider_sticky_napalm',
+		chess_luna11 = 'luna_moon_glaive',
+		chess_tp11 = 'treant_leech_seed',
+		chess_sf11 = 'nevermore_requiem',
+		chess_dk11 = 'dragon_knight_elder_dragon_form',
+		chess_viper11 = 'viper_viper_strike',
+		chess_medusa11 = 'medusa_stone_gaze',
+		chess_disruptor11 = 'disruptor_static_storm',
+		chess_ga11 = 'alchemist_chemical_rage',
+		chess_tech11 = 'chess_tech_bomb',
+		--
+		chess_fur11 = 'fur_tree',
+		chess_ld11 = 'ld_bear',
+		--
+		chess_morph11 = 'morphling_waveform',
+		chess_tb11 = 'tb_mohua',
+		chess_tiny11 = 'tiny_touzhi',
+		--
+		chess_riki11 = 'riki_smoke_screen',
+		chess_pom11 = 'pom_arrow_far',
+		chess_dp11 = 'death_prophet_exorcism',
+		--
+		chess_fv11 = 'faceless_void_chronosphere',
+		chess_kael11 = 'kael_???',
+		--
+		chess_zeus11 = 'zeus_thunder',
+		chess_mars11 = 'mars_bulwark',
+
+		chess_ck_ssr = 'ck_illusion',
+	}
+
+	for u,_ in pairs(precache_list) do
+		PrecacheUnitByNameSync(u, context)
+	end
 
 
     print("Precache OK")
@@ -1462,6 +1685,8 @@ function DAC:InitGameMode()
 		h134 = "models/items/courier/mole_messenger/mole_messenger.vmdl",--1级矿车老鼠
 		h135 = "models/items/courier/jumo_dire/jumo_dire.vmdl",
 
+		h199 = "models/gezi/ge.vmdl",
+
 		--小英雄信使 ameteur
 		h201 = "models/courier/doom_demihero_courier/doom_demihero_courier.vmdl",
 		h202 = "models/courier/huntling/huntling.vmdl",
@@ -1638,6 +1863,7 @@ function DAC:InitGameMode()
 		h134 = 1.1,--1级矿车老鼠
 		h135 = 1.1,
 
+		h199 = 1.5,
 		--小英雄信使 ameteur
 		h201 = 1.2,
 		h202 = 1.2,
@@ -2693,7 +2919,7 @@ end
 function RestoreARound(teamid)
 	ClearARound(teamid)
 
-	Timers:CreateTimer(RandomFloat(0.5,1),function()
+	Timers:CreateTimer(RandomFloat(0.5,1.5),function()
 		local prepare_riki = false
 		for _,v in pairs(GameRules:GetGameModeEntity().mychess[teamid]) do
 			local x = CreateUnitByName(v.chess,XY2Vector(v.x,v.y,teamid),true,nil,nil,teamid)
@@ -4229,11 +4455,23 @@ function SyncHP(hero)
 		--保存最终阵容
 		local lineup = ''
 		local lineup_count = 0
+
+		--统计这个死亡的玩家都有哪些装备
+		local gg_items = {}
+
 		for _,v in pairs(GameRules:GetGameModeEntity().mychess[hero:GetTeam()]) do
 			if v ~= nil and v.chess ~= nil and lineup_count < hero:GetLevel() then 
 				lineup = lineup..v.chess..','
 				AddAChessToChessPool(v.chess)
 				lineup_count = lineup_count + 1
+
+				if v.item ~= nil then
+					for _,i in pairs(v.item) do
+						if i ~= nil then
+							table.insert(gg_items,i)
+						end
+					end
+				end
 			end
 		end
 
@@ -4246,10 +4484,24 @@ function SyncHP(hero)
 				if hero.hand_entities[i] ~= nil then
 					unitname = hero.hand_entities[i]:GetUnitName()
 					AddAChessToChessPool(unitname)
+
+					for slot=0,8 do
+						if hero.hand_entities[i]:GetItemInSlot(slot)~= nil then
+							local name = hero.hand_entities[i]:GetItemInSlot(slot):GetAbilityName()
+							table.insert(gg_items,name)
+						end
+					end								
 				end
 			end
 		end
 		SetStat(hero:GetPlayerID(), 'chess_lineup',lineup)
+
+		for slot=0,8 do
+			if hero:GetItemInSlot(slot)~= nil then
+				local name = hero:GetItemInSlot(slot):GetAbilityName()
+				table.insert(gg_items,name)
+			end
+		end	
 		
 		hero:ForceKill(false)
 		if GameRules:GetGameModeEntity().death_stack == nil then
@@ -4259,6 +4511,8 @@ function SyncHP(hero)
 				GameRules:GetGameModeEntity().death_stack = hero.steam_id..','..GameRules:GetGameModeEntity().death_stack
 			end
 		end
+
+		debug('玩家死亡，遗产：'..JoinTableString(gg_items))
 
 		--统计还有多少活着的玩家
 		local live_count = 0
@@ -4825,7 +5079,7 @@ function StartAPVPRound()
 	end
 	GameRules:GetGameModeEntity().battle_count = 0
 
-	--添加战斗技能和棋子AI（延时1秒）
+	--添加战斗技能和棋子AI（延时1.5秒）
 	Timers:CreateTimer(1.5,function()
 		for t = 6,13 do
 			for _,v in pairs(GameRules:GetGameModeEntity().to_be_destory_list[t]) do
@@ -5708,7 +5962,7 @@ function MirrorARound(teamid)
 					end
 				end
 			end
-			Timers:CreateTimer(0.8,function()
+			Timers:CreateTimer(0.9,function()
 				AddComboAbility(teamid)
 			end)
 		end
@@ -5716,7 +5970,7 @@ function MirrorARound(teamid)
 end
 
 function MirrorAChess(teamid,i,j,opp)
-	Timers:CreateTimer(RandomFloat(0.1,0.3),function()
+	Timers:CreateTimer(RandomFloat(0.1,0.7),function()
 		local x = CreateUnitByName(GameRules:GetGameModeEntity().mychess[teamid][i..'_'..j].chess,XY2Vector(9-j,9-i,opp),true,nil,nil,DOTA_TEAM_NEUTRALS)
 		MakeTiny(x)
 		MakeMars(x)
@@ -9899,4 +10153,12 @@ function ShowCrown(hero,crown_level)
 			pos = PATTACH_OVERHEAD_FOLLOW,
 		})
 	end
+end
+
+function JoinTableString(t)
+	local str = ''
+	for _,v in pairs(t) do
+		str = str..v..','
+	end
+	return str
 end
