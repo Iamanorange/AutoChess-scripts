@@ -1729,6 +1729,8 @@ function DAC:InitGameMode()
 		h237 = "models/items/courier/frostivus2018_courier_serac_the_seal/frostivus2018_courier_serac_the_seal.vmdl",
 		h238 = "models/items/courier/pangolier_squire/pangolier_squire.vmdl",
 
+		h239 = "models/hujing_wangyu/hujing.vmdl",
+
 		--珍藏信使 pro
 		h301 = "models/items/courier/bookwyrm/bookwyrm.vmdl",
 		h302 = "models/items/courier/captain_bamboo/captain_bamboo.vmdl",
@@ -1819,6 +1821,11 @@ function DAC:InitGameMode()
 		h499 = "effect/jin_dp/courier_krobeling_gold_ambient.vpcf",
 		h399 = "effect/jiangbing/1.vpcf",
 		h308 = "effect/drodo/1.vpcf",
+		h199 = "effect/gewugu/2.vpcf",
+		h239 = "effect/wangyu/1.vpcf",
+	}
+	GameRules:GetGameModeEntity().courier_ground_effect_list = {
+		h199 = "effect/gewugu/2.vpcf",
 	}
 
 	GameRules:GetGameModeEntity().sm_hero_size = {
@@ -1905,6 +1912,7 @@ function DAC:InitGameMode()
 		h236 = 1.2, --嘟嘟鸟
 		h237 = 1.2,
 		h238 = 0.8,
+		h239 = 1.4,
 
 		--珍藏信使 pro
 		h301 = 1.3,
@@ -2115,6 +2123,7 @@ function InitHeros()
 
 				hero.onduty_hero = onduty_hero
 				hero.steam_id = steam_id
+				ShowCourierEffect(hero,1)
 
 				if user_info.is_crown == true then
 					hero.crown = true
@@ -2505,6 +2514,8 @@ function DAC:OnPlayerConnectFull(keys)
 					player_id = hero:GetPlayerID(),
 					hp = hero:GetHealth(),
 					hp_max = hero:GetMaxHealth(),
+					mp = hero:GetMana(),
+					level = hero:GetLevel(),
 				})
 			end)
 		end)
@@ -2522,6 +2533,14 @@ function DAC:OnPlayerConnectFull(keys)
 				gold = hero:GetMana(),
 				lose_streak = hero.lose_streak or 0,
 				win_streak = hero.win_streak or 0,
+			})
+			--同步ui血量
+			CustomGameEventManager:Send_ServerToAllClients("sync_hp",{
+				player_id = hero:GetPlayerID(),
+				hp = hero:GetHealth(),
+				hp_max = hero:GetMaxHealth(),
+				mp = hero:GetMana(),
+				level = hero:GetLevel(),
 			})
 		end)
 		Timers:CreateTimer(RandomFloat(0.1,0.5),function()
@@ -2548,12 +2567,16 @@ function DAC:OnPlayerConnectFull(keys)
 						player_id = i,
 						hp = h:GetHealth(),
 						hp_max = h:GetMaxHealth(),
+						mp = h:GetMana(),
+						level = h:GetLevel(),
 					})
 				else
 					CustomGameEventManager:Send_ServerToTeam(hero:GetTeam(),"sync_hp",{
 						player_id = i,
 						hp = 0,
 						hp_max = 100,
+						mp = h:GetMana(),
+						level = h:GetLevel(),
 					})
 				end
 			end
@@ -2850,6 +2873,10 @@ end
 function DAC:OnSuggestLiuju(keys)
 	local player_id = keys.PlayerID
 	local hero = PlayerId2Hero(player_id)
+
+	if hero == nil then
+		return
+	end
 
 	if GameRules:GetGameModeEntity().battle_round > 3 then
 		return
@@ -4442,6 +4469,8 @@ function SyncHP(hero)
 		player_id = hero:GetPlayerID(),
 		hp = hero:GetHealth(),
 		hp_max = hero:GetMaxHealth(),
+		mp = hero:GetMana(),
+		level = hero:GetLevel(),
 	})
 
 	if GameRules:GetGameModeEntity().START_TIME == nil then
@@ -4465,8 +4494,8 @@ function SyncHP(hero)
 				AddAChessToChessPool(v.chess)
 				lineup_count = lineup_count + 1
 
-				if v.item ~= nil then
-					for _,i in pairs(v.item) do
+				if v.lastitem ~= nil then
+					for _,i in pairs(v.lastitem) do
 						if i ~= nil then
 							table.insert(gg_items,i)
 						end
@@ -4502,6 +4531,18 @@ function SyncHP(hero)
 				table.insert(gg_items,name)
 			end
 		end	
+
+		debug('玩家死亡，遗产：'..JoinTableString(gg_items))
+		-- print(JoinTableString(gg_items))
+
+		for _,gg_item in pairs(gg_items) do
+			local newItem = CreateItem( gg_item, hero, hero )
+			local drop = CreateItemOnPositionForLaunch(hero:GetAbsOrigin(), newItem )
+			local gg_item_v = Vector(RandomInt(-2800,2800),RandomInt(-2800,2800),0)
+			local gg_item_dis = (gg_item_v-hero:GetAbsOrigin()):Length2D()
+			local gg_item_t = gg_item_dis/1000
+			newItem:LaunchLootInitialHeight( false, 0, 200, gg_item_t, gg_item_v)
+		end
 		
 		hero:ForceKill(false)
 		if GameRules:GetGameModeEntity().death_stack == nil then
@@ -4512,7 +4553,7 @@ function SyncHP(hero)
 			end
 		end
 
-		debug('玩家死亡，遗产：'..JoinTableString(gg_items))
+		
 
 		--统计还有多少活着的玩家
 		local live_count = 0
@@ -4618,7 +4659,7 @@ function SyncHP(hero)
 		end
 		if live_count == 0 and PlayerResource:GetPlayerCount() == 1 then
 			PostGame()
-			Timers:CreateTimer(3,function()
+			Timers:CreateTimer(23,function()
 				GameRules:SetGameWinner(DOTA_TEAM_NEUTRALS)
 				
 			end)
@@ -5062,12 +5103,21 @@ function StartAPVPRound()
 				h.cloud_opp_name = chesses.owner
 			else
 				--打pvp敌人
+				
+				local g = GetMyGuestEnemyTeam(i)
+				--i = 我的teamid
+				--v = 我的主场对手的teamid
+				--g = 我的客场对手的teamid
+
 				local enemy_id = TeamId2Hero(v):GetPlayerID()
+				local guest_oppo_id = TeamId2Hero(g):GetPlayerID()
 
 				CustomGameEventManager:Send_ServerToTeam(i,"battle_info",{
 					key = GetClientKey(i),
 					type = "pvp",
 					text = enemy_id,
+					host_oppo_id = enemy_id,
+					guest_oppo_id = guest_oppo_id,
 					round = GameRules:GetGameModeEntity().battle_round,
 				})
 
@@ -6174,27 +6224,33 @@ function ChessAI(u)
 						end
 					elseif GameRules:GetGameModeEntity().ability_behavior_list[a] == 2 then
 						--无目标
-						local newOrder = {
-					 		UnitIndex = u:entindex(), 
-					 		OrderType = DOTA_UNIT_ORDER_CAST_NO_TARGET,
-					 		TargetIndex = nil, --Optional.  Only used when targeting units
-					 		AbilityIndex = u:FindAbilityByName(a):entindex(), --Optional.  Only used when casting abilities
-					 		Position = nil, --Optional.  Only used when targeting the ground
-					 		Queue = 0 --Optional.  Used for queueing up abilities
-					 	}
-						ExecuteOrderFromTable(newOrder)
-
-						if a == 'alchemist_chemical_rage' then
-							AcidSpray({
-								caster = u,
-								ability_level = u:FindAbilityByName(a):GetLevel(),
-							})
+						local unluckydog = nil
+						if a == 'tiny_touzhi' then
+							unluckydog = FindUnluckyDog190(u)
 						end
+						if unluckydog ~= nil or a ~= 'tiny_touzhi' then
+							local newOrder = {
+						 		UnitIndex = u:entindex(), 
+						 		OrderType = DOTA_UNIT_ORDER_CAST_NO_TARGET,
+						 		TargetIndex = nil, --Optional.  Only used when targeting units
+						 		AbilityIndex = u:FindAbilityByName(a):entindex(), --Optional.  Only used when casting abilities
+						 		Position = nil, --Optional.  Only used when targeting the ground
+						 		Queue = 0 --Optional.  Used for queueing up abilities
+						 	}
+							ExecuteOrderFromTable(newOrder)
 
-						return RandomFloat(0.5,2) + ai_delay
+							if a == 'alchemist_chemical_rage' then
+								AcidSpray({
+									caster = u,
+									ability_level = u:FindAbilityByName(a):GetLevel(),
+								})
+							end
+
+							return RandomFloat(0.5,2) + ai_delay
+						end
 					elseif GameRules:GetGameModeEntity().ability_behavior_list[a] == 4 then
 						--单位目标
-						local unluckydog = u
+						local unluckydog = u 
 						if unluckydog ~= nil then
 							local newOrder = {
 						 		UnitIndex = u:entindex(), 
@@ -7633,6 +7689,8 @@ function ApplyDamageInRadius(keys)
 	local radius = keys.radius or 500
 	local damage_type = keys.damage_type or DAMAGE_TYPE_MAGICAL
 	local delay = keys.delay or 0
+	local stun_duration = keys.stun_duration or 0
+	local stun_partical = keys.stun_partical
 
 	Timers:CreateTimer(delay,function()
 		local unlucky_dogs = FindUnitsInRadiusByTeam({
@@ -7649,6 +7707,12 @@ function ApplyDamageInRadius(keys)
 					damage_type = damage_type,
 					damage = damage
 				})
+				if stun_duration > 0 then
+					u:AddNewModifier(u,nil,"modifier_stunned",{ duration = stun_duration })
+				end
+				if stun_partical ~= nil then
+					play_particle(stun_partical,PATTACH_ABSORIGIN_FOLLOW,u,3)
+				end
 			end
 		end 
 	end)
@@ -8001,6 +8065,14 @@ function SummonHero(keys)
 		lose_streak = caster.lose_streak or 0,
 		win_streak = caster.win_streak or 0,
 	})
+	--同步ui血量
+	CustomGameEventManager:Send_ServerToAllClients("sync_hp",{
+		player_id = caster:GetPlayerID(),
+		hp = caster:GetHealth(),
+		hp_max = caster:GetMaxHealth(),
+		mp = caster:GetMana(),
+		level = caster:GetLevel(),
+	})
 end
 
 function ExpBook(keys)
@@ -8020,6 +8092,14 @@ function ExpBook(keys)
 		gold = caster:GetMana(),
 		lose_streak = caster.lose_streak or 0,
 		win_streak = caster.win_streak or 0,
+	})
+	--同步ui血量
+	CustomGameEventManager:Send_ServerToAllClients("sync_hp",{
+		player_id = caster:GetPlayerID(),
+		hp = caster:GetHealth(),
+		hp_max = caster:GetMaxHealth(),
+		mp = caster:GetMana(),
+		level = caster:GetLevel(),
 	})
 end
 
@@ -8048,6 +8128,14 @@ function AddMana(unit, mana)
 		lose_streak = unit.lose_streak or 0,
 		win_streak = unit.win_streak or 0,
 	})
+	--同步ui血量
+	CustomGameEventManager:Send_ServerToAllClients("sync_hp",{
+		player_id = unit:GetPlayerID(),
+		hp = unit:GetHealth(),
+		hp_max = unit:GetMaxHealth(),
+		mp = unit:GetMana(),
+		level = unit:GetLevel(),
+	})
 end
 
 function CostMana(unit, mana)
@@ -8061,6 +8149,14 @@ function CostMana(unit, mana)
 		gold = unit:GetMana(),
 		lose_streak = unit.lose_streak or 0,
 		win_streak = unit.win_streak or 0,
+	})
+	--同步ui血量
+	CustomGameEventManager:Send_ServerToAllClients("sync_hp",{
+		player_id = unit:GetPlayerID(),
+		hp = unit:GetHealth(),
+		hp_max = unit:GetMaxHealth(),
+		mp = unit:GetMana(),
+		level = unit:GetLevel(),
 	})
 end
 
@@ -8617,18 +8713,7 @@ function AddWinStreak(team)
 		hero:SetModel(new_m)
 		AddAbilityAndSetLevel(hero,'courier_fly')
 
-		if hero.onduty_hero ~= nil and GameRules:GetGameModeEntity().courier_flyup_effect_list[hero.onduty_hero] ~= nil then
-			
-			--飞行特效（用于小虚空等特殊信使）
-			if hero.flyup_effect ~= nil then
-				ParticleManager:DestroyParticle(hero.flyup_effect,true)
-			end
-			local flyup_effect = GameRules:GetGameModeEntity().courier_flyup_effect_list[hero.onduty_hero]
-			hero.flyup_effect = PlayParticleOnUnitUntilDeath({
-				caster = hero,
-				p = flyup_effect,
-			})
-		end
+		ShowCourierEffect(hero,2)
 	end
 	hero:SetModelScale(sca)
 	if hero.win_streak == 5 or hero.win_streak == 8 or hero.win_streak == 10 then
@@ -8659,9 +8744,7 @@ function RemoveWinStreak(team)
 		hero:SetModel(hero.ori_model)
 		RemoveAbilityAndModifier(hero,'courier_fly')
 
-		if hero.flyup_effect ~= nil then
-			ParticleManager:DestroyParticle(hero.flyup_effect,true)
-		end
+		ShowCourierEffect(hero,1)
 		if hero.is_crown == true then
 			ShowCrown(hero,1)
 		end
@@ -9111,7 +9194,6 @@ function TinyTouzhi(keys)
 	local ability = keys.ability
 	local level = ability:GetLevel()
 	
-	
 	local radius = keys.radius or 200
 	local damage = keys.damage or 100
 	local stun = keys.stun or 2
@@ -9122,7 +9204,11 @@ function TinyTouzhi(keys)
 	end
 
 	local team_id = target.at_team_id or target.team_id
-	local v = FindFarthestEmptyGrid(target)
+	local v = FindFarthestCanAttackEnemyEmptyGrid(caster)
+	if v == nil or (v-target:GetAbsOrigin()):Length2D() < 384 then
+		v = FindFarthestEmptyGrid(target)
+	end
+
 	local yy = target.y
 	local xx = target.x
 
@@ -9139,6 +9225,8 @@ function TinyTouzhi(keys)
 			position = target:GetAbsOrigin(),
 			damage = damage,
 			damage_type = DAMAGE_TYPE_PHYSICAL,
+			stun_duration = stun_duration+stun,
+			stun_partical = "particles/units/heroes/hero_tiny/tiny_toss_impact.vpcf",
 		})
 		play_particle("particles/units/heroes/hero_tiny/tiny_toss_impact.vpcf",PATTACH_ABSORIGIN_FOLLOW,target,3)
 		EmitSoundOn('Ability.TossImpact',target)
@@ -9297,6 +9385,10 @@ function DAC:OnChangeOndutyHero(keys)
 	hero.ori_model = onduty_hero_model
 	hero.is_changed_hero = true
 	hero.onduty_hero = onduty_hero
+	ShowCourierEffect(hero,1)
+
+	hero.init_model_scale = GameRules:GetGameModeEntity().sm_hero_size[onduty_hero] or 1
+	hero:SetModelScale(hero.init_model_scale)
 
 	--换特效
 	if hero.effect ~= nil then
@@ -9383,7 +9475,14 @@ function SendYingdiData(t,dur)
 	    insertdata["total"] = data.total
 	    insertdata["level"] = data.level
 	    insertdata["chess"] = GameRules:GetGameModeEntity().stat_info[user]['chess_lineup']
-	    table.insert(yingdi_data['players'],insertdata)
+	    insertdata["win_round"] = GameRules:GetGameModeEntity().stat_info[user]['win_round']
+	    insertdata["lose_round"] = GameRules:GetGameModeEntity().stat_info[user]['lose_round']
+	    insertdata["kills"] = GameRules:GetGameModeEntity().stat_info[user]['kills']
+	    insertdata["deaths"] = GameRules:GetGameModeEntity().stat_info[user]['deaths']
+	    insertdata["gold"] = GameRules:GetGameModeEntity().stat_info[user]['gold']
+	    insertdata["candy"] = GameRules:GetGameModeEntity().stat_info[user]['candy']
+	    insertdata["duration"] = GameRules:GetGameModeEntity().stat_info[user]['duration']
+	    table.insert(max_data['players'],insertdata)
 	end
 	SendHTTPPost(yingdi_url,yingdi_data)
 end
@@ -9406,7 +9505,14 @@ function SendPWData(t,dur)
 	    insertdata["total"] = data.total
 	    insertdata["level"] = data.level
 	    insertdata["chess"] = GameRules:GetGameModeEntity().stat_info[user]['chess_lineup']
-	    table.insert(pw_data['players'],insertdata)
+	    insertdata["win_round"] = GameRules:GetGameModeEntity().stat_info[user]['win_round']
+	    insertdata["lose_round"] = GameRules:GetGameModeEntity().stat_info[user]['lose_round']
+	    insertdata["kills"] = GameRules:GetGameModeEntity().stat_info[user]['kills']
+	    insertdata["deaths"] = GameRules:GetGameModeEntity().stat_info[user]['deaths']
+	    insertdata["gold"] = GameRules:GetGameModeEntity().stat_info[user]['gold']
+	    insertdata["candy"] = GameRules:GetGameModeEntity().stat_info[user]['candy']
+	    insertdata["duration"] = GameRules:GetGameModeEntity().stat_info[user]['duration']
+	    table.insert(max_data['players'],insertdata)
 	end
 	SendHTTPPost(pw_url,pw_data)
 end
@@ -9992,6 +10098,7 @@ function ZeusThunder(keys)
 					victim = v,
 					damage = math.floor(v:GetHealth()*damage_per/100 + damage),
 				})
+				thunder_count = thunder_count + 1
 			end
 		end
 	end
@@ -10161,4 +10268,35 @@ function JoinTableString(t)
 		str = str..v..','
 	end
 	return str
+end
+
+function ShowCourierEffect(hero,type)
+	if hero.flyup_effect ~= nil then
+		ParticleManager:DestroyParticle(hero.flyup_effect,true)
+	end
+	if hero.ground_effect ~= nil then
+		ParticleManager:DestroyParticle(hero.ground_effect,true)
+	end
+	if type == 1 then
+		--陆地特效
+		if hero.onduty_hero ~= nil and GameRules:GetGameModeEntity().courier_ground_effect_list[hero.onduty_hero] ~= nil then
+			--陆地特效
+			local ground_effect = GameRules:GetGameModeEntity().courier_ground_effect_list[hero.onduty_hero]
+			hero.ground_effect = PlayParticleOnUnitUntilDeath({
+				caster = hero,
+				p = ground_effect,
+			})
+		end
+	end
+	if type == 2 then
+		--飞行特效
+		if hero.onduty_hero ~= nil and GameRules:GetGameModeEntity().courier_flyup_effect_list[hero.onduty_hero] ~= nil then
+			--飞行特效
+			local flyup_effect = GameRules:GetGameModeEntity().courier_flyup_effect_list[hero.onduty_hero]
+			hero.flyup_effect = PlayParticleOnUnitUntilDeath({
+				caster = hero,
+				p = flyup_effect,
+			})
+		end
+	end
 end
