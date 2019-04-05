@@ -2946,6 +2946,21 @@ end
 function RestoreARound(teamid)
 	ClearARound(teamid)
 
+	--重置英雄身上的装备，使他们归属自己
+	-- local restore_items = {}
+	local hero = TeamId2Hero(teamid)
+	for slot=0,8 do
+		if hero:GetItemInSlot(slot)~= nil then
+			-- local name = hero:GetItemInSlot(slot):GetAbilityName()
+			-- table.insert(restore_items,name)
+			-- hero:RemoveItem(hero:GetItemInSlot(slot))
+			hero:GetItemInSlot(slot):SetPurchaser(hero)
+		end
+	end
+	-- for _,v in pairs(restore_items) do
+	-- 	hero:AddItemByName(v)
+	-- end
+	
 	Timers:CreateTimer(RandomFloat(0.5,1.5),function()
 		local prepare_riki = false
 		for _,v in pairs(GameRules:GetGameModeEntity().mychess[teamid]) do
@@ -4532,16 +4547,18 @@ function SyncHP(hero)
 			end
 		end	
 
-		debug('玩家死亡，遗产：'..JoinTableString(gg_items))
-		-- print(JoinTableString(gg_items))
-
+		--遗产
 		for _,gg_item in pairs(gg_items) do
-			local newItem = CreateItem( gg_item, hero, hero )
-			local drop = CreateItemOnPositionForLaunch(hero:GetAbsOrigin(), newItem )
-			local gg_item_v = Vector(RandomInt(-2800,2800),RandomInt(-2800,2800),0)
-			local gg_item_dis = (gg_item_v-hero:GetAbsOrigin()):Length2D()
-			local gg_item_t = gg_item_dis/1000
-			newItem:LaunchLootInitialHeight( false, 0, 200, gg_item_t, gg_item_v)
+			if RandomInt(1,100) > 50 then
+				local newItem = CreateItem( gg_item, hero, hero )
+				local drop = CreateItemOnPositionForLaunch(hero:GetAbsOrigin(), newItem )
+
+				local gg_item_v = CenterVector(RandomInt(6,13)) + Vector(RandomInt(-768,768),RandomInt(-768,768),0)
+				-- local gg_item_v = Vector(RandomInt(-2800,2800),RandomInt(-2800,2800),0)
+				local gg_item_dis = (gg_item_v-hero:GetAbsOrigin()):Length2D()
+				local gg_item_t = gg_item_dis/1000
+				newItem:LaunchLootInitialHeight( false, 0, 400, gg_item_t, gg_item_v)
+			end
 		end
 		
 		hero:ForceKill(false)
@@ -6823,8 +6840,8 @@ function FindUnluckyDogRandom(u)
 	local try_count = 0 
 
 	while unluckydog == nil and try_count < 10000 do
-		local random = RandomInt(1,table.maxn(GameRules:GetGameModeEntity().to_be_destory_list))
-		local unit = GameRules:GetGameModeEntity().to_be_destory_list[random]
+		local random = RandomInt(1,table.maxn(GameRules:GetGameModeEntity().to_be_destory_list[team]))
+		local unit = GameRules:GetGameModeEntity().to_be_destory_list[team][random]
 		if unit ~= nil and unit.y_x and unit:IsNull() == false and unit:IsAlive()==true and unit.team_id ~= u.team_id and unit:IsInvisible() == false then
 			if unluckydog == nil then
 				unluckydog = unit
@@ -8380,8 +8397,7 @@ function ChessTechBomb(keys)
 	local x = Vector2X(p,at_team)
 
 	if (GameRules:GetGameModeEntity().unit[at_team][y..'_'..x] ~= nil) then
-		debug('炸药桶的位置不是空格子')
-		return
+		p = FindEmptyGridAtUnit(caster)
 	end
 
 	--创建一个炸弹
@@ -9205,7 +9221,7 @@ function TinyTouzhi(keys)
 
 	local team_id = target.at_team_id or target.team_id
 	local v = FindFarthestCanAttackEnemyEmptyGrid(caster)
-	if v == nil or (v-target:GetAbsOrigin()):Length2D() < 384 then
+	if v == nil or (v-target:GetAbsOrigin()):Length2D() < 500 then
 		v = FindFarthestEmptyGrid(target)
 	end
 
