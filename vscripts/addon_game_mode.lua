@@ -4560,7 +4560,7 @@ function SyncHP(hero)
 				local newItem = CreateItem( gg_item, hero, hero )
 				local drop = CreateItemOnPositionForLaunch(hero:GetAbsOrigin(), newItem )
 
-				local gg_item_v = CenterVector(RandomInt(6,13)) + Vector(RandomInt(-768,768),RandomInt(-768,768),0)
+				local gg_item_v = CenterVector(RandomInt(6,13)) + Vector(RandomInt(-512,512),RandomInt(-512,512),0)
 				-- local gg_item_v = Vector(RandomInt(-2800,2800),RandomInt(-2800,2800),0)
 				local gg_item_dis = (gg_item_v-hero:GetAbsOrigin()):Length2D()
 				local gg_item_t = gg_item_dis/1000
@@ -9510,7 +9510,7 @@ function SendYingdiData(t,dur)
 	    insertdata["gold"] = GameRules:GetGameModeEntity().stat_info[user]['gold']
 	    insertdata["candy"] = GameRules:GetGameModeEntity().stat_info[user]['candy']
 	    insertdata["duration"] = GameRules:GetGameModeEntity().stat_info[user]['duration']
-	    table.insert(max_data['players'],insertdata)
+	    table.insert(yingdi_data['players'],insertdata)
 	end
 	SendHTTPPost(yingdi_url,yingdi_data)
 end
@@ -9540,7 +9540,7 @@ function SendPWData(t,dur)
 	    insertdata["gold"] = GameRules:GetGameModeEntity().stat_info[user]['gold']
 	    insertdata["candy"] = GameRules:GetGameModeEntity().stat_info[user]['candy']
 	    insertdata["duration"] = GameRules:GetGameModeEntity().stat_info[user]['duration']
-	    table.insert(max_data['players'],insertdata)
+	    table.insert(pw_data['players'],insertdata)
 	end
 	SendHTTPPost(pw_url,pw_data)
 end
