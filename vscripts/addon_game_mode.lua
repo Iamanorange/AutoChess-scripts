@@ -2954,11 +2954,16 @@ function RestoreARound(teamid)
 			-- local name = hero:GetItemInSlot(slot):GetAbilityName()
 			-- table.insert(restore_items,name)
 			-- hero:RemoveItem(hero:GetItemInSlot(slot))
-			hero:GetItemInSlot(slot):SetPurchaser(hero)
+			if hero:GetItemInSlot(slot):GetPurchaser():entindex() ~= hero:entindex() then
+				local name = hero:GetItemInSlot(slot):GetAbilityName()
+				hero:RemoveItem(hero:GetItemInSlot(slot))
+				hero:AddItemByName(name)
+			end
+			-- hero:GetItemInSlot(slot):SetPurchaser(hero)
 		end
 	end
 	-- for _,v in pairs(restore_items) do
-	-- 	hero:AddItemByName(v)
+	-- 	
 	-- end
 	
 	Timers:CreateTimer(RandomFloat(0.5,1.5),function()
@@ -4548,8 +4553,10 @@ function SyncHP(hero)
 		end	
 
 		--遗产
+		local gg_item_count = 0
 		for _,gg_item in pairs(gg_items) do
 			if RandomInt(1,100) > 50 then
+				gg_item_count = gg_item_count + 1
 				local newItem = CreateItem( gg_item, hero, hero )
 				local drop = CreateItemOnPositionForLaunch(hero:GetAbsOrigin(), newItem )
 
@@ -4560,6 +4567,11 @@ function SyncHP(hero)
 				newItem:LaunchLootInitialHeight( false, 0, 400, gg_item_t, gg_item_v)
 			end
 		end
+		ShowCombat({
+			t = 'player_dead',
+			player = hero:GetPlayerID(),
+			num = gg_item_count,
+		})
 		
 		hero:ForceKill(false)
 		if GameRules:GetGameModeEntity().death_stack == nil then
@@ -4676,7 +4688,7 @@ function SyncHP(hero)
 		end
 		if live_count == 0 and PlayerResource:GetPlayerCount() == 1 then
 			PostGame()
-			Timers:CreateTimer(23,function()
+			Timers:CreateTimer(3,function()
 				GameRules:SetGameWinner(DOTA_TEAM_NEUTRALS)
 				
 			end)
@@ -9221,7 +9233,7 @@ function TinyTouzhi(keys)
 
 	local team_id = target.at_team_id or target.team_id
 	local v = FindFarthestCanAttackEnemyEmptyGrid(caster)
-	if v == nil or (v-target:GetAbsOrigin()):Length2D() < 500 then
+	if v == nil or (v-target:GetAbsOrigin()):Length2D() < 400 then
 		v = FindFarthestEmptyGrid(target)
 	end
 
@@ -9235,7 +9247,7 @@ function TinyTouzhi(keys)
 	Timers:CreateTimer(stun_duration+0.1,function()
 		ApplyDamageInRadius({
 			caster = caster,
-			team = 2,
+			team = caster.team_id,
 			radius = radius,
 			role = 2,
 			position = target:GetAbsOrigin(),
