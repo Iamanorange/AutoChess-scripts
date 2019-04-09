@@ -7829,12 +7829,14 @@ function RenJia(keys)
 	if damage <= 0 then
 		return
 	end
-    ApplyDamage({
-    	victim=attacker,
-    	attacker=caster,
-    	damage_type=DAMAGE_TYPE_PURE,
-    	damage=damage
-    })
+	Timers:CreateTimer(0.05,function()
+		ApplyDamage({
+	    	victim=attacker,
+	    	attacker=caster,
+	    	damage_type=DAMAGE_TYPE_PURE,
+	    	damage=damage
+	    })
+	end)
 end
 --电锤技能
 function DianChui(event)
