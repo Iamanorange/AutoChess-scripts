@@ -6837,12 +6837,12 @@ function FindBestSunderFriend(u)
 			if per > hp_per_best then
 				unluckydog = unit
 				hp_per_best = per
-				hp_per = hp
+				hp_best = hp
 			end
 			if per == hp_per_best and hp < hp_best then
 				unluckydog = unit
 				hp_per_best = per
-				hp_per = hp
+				hp_best = hp
 			end
 		end
 	end
@@ -7775,7 +7775,7 @@ function show_damage(keys)
 			AttackHeal({
 				attacker = attacker,
 				damage = damage,
-				per = 0.1,
+				per = 0.15,
 			})
 			play_particle("particles/generic_gameplay/generic_lifesteal.vpcf",PATTACH_OVERHEAD_FOLLOW,attacker,2)
 		end
@@ -7783,7 +7783,7 @@ function show_damage(keys)
 			AttackHeal({
 				attacker = attacker,
 				damage = damage,
-				per = 0.2,
+				per = 0.25,
 			})
 		end
 	end
@@ -7829,14 +7829,12 @@ function RenJia(keys)
 	if damage <= 0 then
 		return
 	end
-	Timers:CreateTimer(0.05,function()
-		ApplyDamage({
-	    	victim=attacker,
-	    	attacker=caster,
-	    	damage_type=DAMAGE_TYPE_PURE,
-	    	damage=damage
-	    })
-	end)
+    ApplyDamage({
+    	victim=attacker,
+    	attacker=caster,
+    	damage_type=DAMAGE_TYPE_PURE,
+    	damage=damage
+    })
 end
 --电锤技能
 function DianChui(event)
