@@ -7222,7 +7222,7 @@
 		"MinimapIcon"	"minimap_creep"
 		"MinimapIconSize"	"256"
 		"AttackDamageMin"	"70"
-		"AttackDamageMax"	"110"
+		"AttackDamageMax"	"100"
 		"AttackRate"	"1.2"
 		"AttackRange"	"205"
 		"Creature"
@@ -7342,7 +7342,7 @@
 		"MinimapIcon"	"minimap_creep"
 		"MinimapIconSize"	"256"
 		"AttackDamageMin"	"140"
-		"AttackDamageMax"	"220"
+		"AttackDamageMax"	"200"
 		"AttackRate"	"1.2"
 		"AttackRange"	"205"
 		"Creature"
@@ -7462,7 +7462,7 @@
 		"MinimapIcon"	"minimap_creep"
 		"MinimapIconSize"	"256"
 		"AttackDamageMin"	"280"
-		"AttackDamageMax"	"440"
+		"AttackDamageMax"	"400"
 		"AttackRate"	"1.2"
 		"AttackRange"	"205"
 		"Creature"
@@ -8659,23 +8659,23 @@
 			{
 				"Wearable1"
 				{
-					"ItemDef"	"7789"
+					"ItemDef"	"7740"
 				}
 				"Wearable2"
 				{
-					"ItemDef"	"7790"
+					"ItemDef"	"7947"
 				}
 				"Wearable3"
 				{
-					"ItemDef"	"7791"
+					"ItemDef"	"5337"
 				}
 				"Wearable4"
 				{
-					"ItemDef"	"7792"
+					"ItemDef"	"7878"
 				}
 				"Wearable5"
 				{
-					"ItemDef"	"7793"
+					"ItemDef"	"7950"
 				}
 			}
 		}
@@ -8779,23 +8779,23 @@
 			{
 				"Wearable1"
 				{
-					"ItemDef"	"7789"
+					"ItemDef"	"7740"
 				}
 				"Wearable2"
 				{
-					"ItemDef"	"7790"
+					"ItemDef"	"7947"
 				}
 				"Wearable3"
 				{
-					"ItemDef"	"7791"
+					"ItemDef"	"5337"
 				}
 				"Wearable4"
 				{
-					"ItemDef"	"7792"
+					"ItemDef"	"7878"
 				}
 				"Wearable5"
 				{
-					"ItemDef"	"7793"
+					"ItemDef"	"7950"
 				}
 			}
 		}
@@ -14558,6 +14558,7 @@
 		"SoundSet"	"Hero_DragonKnight"
 		"GameSoundsFile"	"soundevents/game_sounds_heroes/game_sounds_dragon_knight.vsndevts"
 		"VoiceFile"	"soundevents/voscripts/game_sounds_vo_dragon_knight.vsndevts"
+		"ProjectileSpeed"	"800"
 	}
 
 	// 4
@@ -14647,31 +14648,31 @@
 			{
 				"Wearable1"
 				{
-					"ItemDef"	"7416"
+					"ItemDef"	"8963"
 				}
 				"Wearable2"
 				{
-					"ItemDef"	"7417"
+					"ItemDef"	"8974"
 				}
 				"Wearable3"
 				{
-					"ItemDef"	"7418"
+					"ItemDef"	"8975"
 				}
 				"Wearable4"
 				{
-					"ItemDef"	"7419"
+					"ItemDef"	"8978"
 				}
 				"Wearable5"
 				{
-					"ItemDef"	"7420"
+					"ItemDef"	"7671"
 				}
 				"Wearable6"
 				{
-					"ItemDef"	"7421"
+					"ItemDef"	"8976"
 				}
 				"Wearable7"
 				{
-					"ItemDef"	"9644"
+					"ItemDef"	"8977"
 				}
 			}
 		}
@@ -14686,6 +14687,7 @@
 		"SoundSet"	"Hero_DragonKnight"
 		"GameSoundsFile"	"soundevents/game_sounds_heroes/game_sounds_dragon_knight.vsndevts"
 		"VoiceFile"	"soundevents/voscripts/game_sounds_vo_dragon_knight.vsndevts"
+		"ProjectileSpeed"	"800"
 	}
 
 	// 4
@@ -14775,31 +14777,31 @@
 			{
 				"Wearable1"
 				{
-					"ItemDef"	"6787"
+					"ItemDef"	"8799"
 				}
 				"Wearable2"
 				{
-					"ItemDef"	"6788"
+					"ItemDef"	"7419"
 				}
 				"Wearable3"
 				{
-					"ItemDef"	"6789"
+					"ItemDef"	"7438"
 				}
 				"Wearable4"
 				{
-					"ItemDef"	"6790"
+					"ItemDef"	"9135"
 				}
 				"Wearable5"
 				{
-					"ItemDef"	"6791"
+					"ItemDef"	"7671"
 				}
 				"Wearable6"
 				{
-					"ItemDef"	"6792"
+					"ItemDef"	"9134"
 				}
 				"Wearable7"
 				{
-					"ItemDef"	"7671"
+					"ItemDef"	"6925"
 				}
 			}
 		}
@@ -14814,6 +14816,7 @@
 		"SoundSet"	"Hero_DragonKnight"
 		"GameSoundsFile"	"soundevents/game_sounds_heroes/game_sounds_dragon_knight.vsndevts"
 		"VoiceFile"	"soundevents/voscripts/game_sounds_vo_dragon_knight.vsndevts"
+		"ProjectileSpeed"	"800"
 	}
 
 	// 4
