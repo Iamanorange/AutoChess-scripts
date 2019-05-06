@@ -8957,14 +8957,14 @@
 						"Target"	"CASTER"
 						"ScriptFile"	"scripts/vscripts/addon_game_mode.lua"
 						"Function"	"AddMaxHPPer"
-						"per"	"10"
+						"per"	"5"
 					}
 					"RunScript"
 					{
 						"Target"	"CASTER"
 						"ScriptFile"	"scripts/vscripts/addon_game_mode.lua"
 						"Function"	"ChangeModelScale"
-						"x"	"1.2"
+						"x"	"1.1"
 					}
 				}
 				"EffectAttachType"	"attach_origin"
@@ -9419,7 +9419,7 @@
 								"ModifierName"	"modifier_is_knight_buff_2_plus"
 							}
 						}
-						"Chance"	"40"
+						"Chance"	"35"
 					}
 				}
 				"EffectName"	"effect/qishi/1.vpcf"
@@ -9897,7 +9897,7 @@
 	"is_priest"
 	{
 		"BaseClass"	"ability_datadriven"
-		"AbilityTextureName"	"forest_troll_high_priest_heal"
+		"AbilityTextureName"	"rubick_fade_bolt"
 		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
 		"AbilityUnitTargetType"	"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
 		"AbilityUnitTargetTeam"	"DOTA_UNIT_TARGET_TEAM_FRIENDLY"
@@ -10741,12 +10741,12 @@
 			"02"
 			{
 				"var_type"	"FIELD_FLOAT"
-				"damage_percent"	"5 7 9"
+				"damage_percent"	"6 9 12"
 			}
 			"03"
 			{
 				"var_type"	"FIELD_FLOAT"
-				"duration"	"10"
+				"duration"	"8"
 			}
 		}
 	}
@@ -12999,14 +12999,14 @@
 		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_HIDDEN | DOTA_ABILITY_BEHAVIOR_PASSIVE"
 		"precache"
 		{
-			"particle"	"particles/econ/items/silencer/silencer_ti6/silencer_last_word_status_ti6.vpcf"
+			"particle"	"effect/emengchanrao/1.vpcf"
 		}
 		"Modifiers"
 		{
 			"modifier_texiao_star"
 			{
 				"Passive"	"1"
-				"EffectName"	"particles/econ/items/silencer/silencer_ti6/silencer_last_word_status_ti6.vpcf"
+				"EffectName"	"effect/emengchanrao/1.vpcf"
 				"EffectAttachType"	"attach_origin"
 				"IsHidden"	"1"
 			}
@@ -14542,7 +14542,7 @@
 			}
 			"modifier_show_combo_is_priest"
 			{
-				"TextureName"	"forest_troll_high_priest_heal"
+				"TextureName"	"rubick_fade_bolt"
 				"IsBuff"	"1"
 			}
 		}
@@ -15058,5 +15058,44 @@
 				}
 			}
 		}
+	}
+
+	"wisp_wildcard"
+	{
+		"BaseClass"	"ability_datadriven"
+		"AbilityTextureName"	"wisp_spirits_out"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"MaxLevel"	"2"
+	}
+
+	"lich_frost_armor"
+	{
+		"MaxLevel"	"3"
+		"AbilityCastPoint"	"0.3"
+		"AbilityCooldown"	"8 6 4"
+		"AbilitySpecial"
+		{
+			"01"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"armor_bonus"			"4 6 8"
+			}		
+			"02"
+			{
+				"var_type"				"FIELD_FLOAT"
+				"slow_duration"			"2.0 2.0 2.0"
+			}
+			"03"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"slow_movement_speed"	"0"
+			}
+			"04"
+			{
+				"var_type"				"FIELD_INTEGER"
+				"slow_attack_speed"		"-20 -30 -40"
+			}		
+		}
+		"AbilityCastAnimation"		"ACT_DOTA_CAST_ABILITY_2"
 	}
 }
