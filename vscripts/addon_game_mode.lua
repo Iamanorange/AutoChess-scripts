@@ -515,6 +515,10 @@ function Precache( context )
 		"soundevents/game_sounds_heroes/game_sounds_dark_seer.vsndevts",
 		"soundevents/music/game_sounds_stingers_diretide.vsndevts",
 		"particles/gem/brewmaster_drunken_haze_debuff_bubbles_2.vpcf",
+		"models/qie/qie.vmdl",
+		"models/courier/f2p_courier/f2p_courier.vmdl",
+		"models/items/courier/azuremircourierfinal/azuremircourierfinal.vmdl",
+		"effect/roshan_ti9/1.vpcf",
 	} 
     print("Precache...")
 	local t=table.maxn(mxx)
@@ -765,6 +769,8 @@ function DAC:InitGameMode()
     GameRules:GetGameModeEntity().playerid2steamid = {}
     GameRules:GetGameModeEntity().steamid2name = {}
     GameRules:GetGameModeEntity().stat_info = {}
+    GameRules:GetGameModeEntity().send_info = {}
+    GameRules:GetGameModeEntity().send_status = {}
     GameRules:GetGameModeEntity().show_damage = false
     GameRules:GetGameModeEntity().upload_lineup = {}
     GameRules:GetGameModeEntity().upload_detail_stat = {}
@@ -1586,6 +1592,8 @@ function DAC:InitGameMode()
 		h133 = "models/courier/mechjaw/mechjaw.vmdl",--机械咬人箱new
 		h134 = "models/items/courier/mole_messenger/mole_messenger.vmdl",--1级矿车老鼠
 		h135 = "models/items/courier/jumo_dire/jumo_dire.vmdl",
+		h136 = "models/items/courier/courier_ti9/courier_ti9.vmdl",
+		h137 = "models/items/courier/courier_ti9/courier_ti9_lvl2/courier_ti9_lvl2.vmdl",
 
 		h199 = "models/gezi/ge.vmdl",
 
@@ -1632,6 +1640,8 @@ function DAC:InitGameMode()
 		h238 = "models/items/courier/pangolier_squire/pangolier_squire.vmdl",
 
 		h239 = "models/hujing_wangyu/hujing.vmdl",
+		h240 = "models/items/courier/courier_ti9/courier_ti9_lvl3/courier_ti9_lvl3.vmdl",
+		
 
 		--珍藏信使 pro
 		h301 = "models/items/courier/bookwyrm/bookwyrm.vmdl",
@@ -1672,6 +1682,10 @@ function DAC:InitGameMode()
 		h334 = "models/courier/smeevil_crab/smeevil_crab.vmdl",
 		h335 = "models/items/courier/mole_messenger/mole_messenger_lvl6.vmdl",--绿钻头矿车老鼠
 		h336 = "models/items/courier/amaterasu/amaterasu.vmdl", --天照大神
+		h337 = "models/qie/qie.vmdl",
+		h338 = "models/courier/f2p_courier/f2p_courier.vmdl",
+		h339 = "models/items/courier/azuremircourierfinal/azuremircourierfinal.vmdl",
+		h340 = "models/items/courier/courier_ti9/courier_ti9_lvl6/courier_ti9_lvl6.vmdl",
 
 		h399 = "models/courier/baby_rosh/babyroshan_winter18.vmdl",--姜饼肉山
 
@@ -1713,6 +1727,8 @@ function DAC:InitGameMode()
 		h430 = "models/courier/frull/frull_courier.vmdl", --灵犀弗拉尔
 		h431 = "models/items/courier/sltv_10_courier/sltv_10_courier.vmdl", --黄油小生
 		h432 = "models/items/courier/nian_courier/nian_courier.vmdl", --年兽宝宝
+		h433 = "models/courier/baby_rosh/babyroshan_ti9.vmdl",
+		h434 = "models/items/courier/courier_ti9/courier_ti9_lvl7/courier_ti9_lvl7.vmdl",
 
 		h444 = "models/props_gameplay/donkey.vmdl", 
 	}
@@ -1726,6 +1742,7 @@ function DAC:InitGameMode()
 		h199 = "effect/gewugu/3.vpcf",
 		h239 = "effect/wangyu/1.vpcf",
 		h303 = "effect/douyu/2.vpcf",
+		h433 = "effect/roshan_ti9/1.vpcf",
 	}
 	GameRules:GetGameModeEntity().courier_ground_effect_list = {
 		h199 = "effect/gewugu/2.vpcf",
@@ -1773,6 +1790,8 @@ function DAC:InitGameMode()
 		h133 = 1.1,--机械咬人箱new
 		h134 = 1.1,--1级矿车老鼠
 		h135 = 1.1,
+		h136 = 1.1,
+		h137 = 1.15,
 
 		h199 = 1.5,
 		--小英雄信使 ameteur
@@ -1804,7 +1823,7 @@ function DAC:InitGameMode()
 		h225 = 1.3, --胆小南瓜人
 		h226 = 1.3, --螃蟹1
 		h227 = 1.3, --螃蟹2
-		h228 = 1.25, --螃蟹3
+		h228 = 1.2, --螃蟹3
 
 		h229 = 1.2, --竭智法师new
 		h230 = 1.3, --蓝心白隼new
@@ -1817,6 +1836,7 @@ function DAC:InitGameMode()
 		h237 = 1.2,
 		h238 = 0.8,
 		h239 = 1.4,
+		h240 = 1.25,
 
 		--珍藏信使 pro
 		h301 = 1.3,
@@ -1857,6 +1877,10 @@ function DAC:InitGameMode()
 		h334 = 1.3,
 		h335 = 1.1,--绿钻头矿车老鼠
 		h336 = 1.15, --天照大神
+		h337 = 1.4,
+		h338 = 1.3,
+		h339 = 1.4,
+		h340 = 1.3,
 
 		h399 = 1.2,--姜饼肉山
 
@@ -1898,6 +1922,8 @@ function DAC:InitGameMode()
 		h430 = 1.3, --灵犀弗拉尔
 		h431 = 1.2, --黄油小生
 		h432 = 1.3, --年兽宝宝
+		h433 = 1.35,
+		h434 = 1.4,
 
 		h444 = 1, 
 	}
@@ -1977,6 +2003,7 @@ function InitHeros()
 	end
 
 	GameRules:GetGameModeEntity().cloudlineup = {}
+	GameRules:GetGameModeEntity().death_rank = PlayerResource:GetPlayerCount()
 	if PlayerResource:GetPlayerCount() == 1 then
 		--单人获取云对战列表
 		prt('#text_difficulty_select')
@@ -3517,9 +3544,10 @@ function DAC:OnRequestBuyChess(keys)
 	if PlayerResource:GetPlayer(GameRules:GetGameModeEntity().team2playerid[team_id]) == nil then
 		return
 	end
-	if h == nil or h.curr_chess_table == nil or h.curr_chess_table[buy_index + 1] == nil then
+	if h == nil or h:IsAlive() == false or h.curr_chess_table == nil or h.curr_chess_table[buy_index + 1] == nil then
 		return
 	end
+
 	local chess = h.curr_chess_table[buy_index + 1]
 	local price = GameRules:GetGameModeEntity().chess_2_mana[chess]
 	--判断能不能买得起
@@ -4659,13 +4687,6 @@ function SyncHP(hero)
 		})
 		
 		hero:ForceKill(false)
-		if GameRules:GetGameModeEntity().death_stack == nil then
-			GameRules:GetGameModeEntity().death_stack = hero.steam_id
-		else
-			if string.find(GameRules:GetGameModeEntity().death_stack,hero.steam_id) == nil then
-				GameRules:GetGameModeEntity().death_stack = hero.steam_id..','..GameRules:GetGameModeEntity().death_stack
-			end
-		end
 
 		--统计还有多少活着的玩家
 		local live_count = 0
@@ -4681,6 +4702,7 @@ function SyncHP(hero)
 			end
 		end
 
+		GameRules:GetGameModeEntity().death_rank = live_count+1
 		--决赛提醒
 		if live_count == 2 and PlayerResource:GetPlayerCount() > 2 then
 			GameRules:GetGameModeEntity().pilao_round = GameRules:GetGameModeEntity().battle_round + 6 --野怪关不算
@@ -4688,97 +4710,159 @@ function SyncHP(hero)
 			-- EmitGlobalSound("diretide_eventstart_Stinger")
 			EmitGlobalSound("diretide_sugarrush_Stinger")
 		end
-
-		if live_count == 1 and PlayerResource:GetPlayerCount() > 1 then
-			local dur = math.floor(GameRules:GetGameTime() - GameRules:GetGameModeEntity().START_TIME)+3
-			SetStat(GameRules:GetGameModeEntity().last_player_hero:GetPlayerID(), 'duration', dur)
-			SetStat(GameRules:GetGameModeEntity().last_player_hero:GetPlayerID(), 'round', GameRules:GetGameModeEntity().battle_round)
-			-- last_hero:ForceKill(false)
-
-			--保存最终阵容
-			local lineup = ''
-			for _,v in pairs(GameRules:GetGameModeEntity().mychess[last_hero:GetTeam()]) do
-				if v ~= nil and v.chess ~= nil then 
-					lineup = lineup..v.chess..','
-				end
+		if GameRules:GetGameModeEntity().death_rank >= 2 and PlayerResource:GetPlayerCount() > 1 then
+			if GameRules:GetGameModeEntity().send_status[hero.steam_id] ~= nil then
+				return
 			end
-			SetStat(last_hero:GetPlayerID(), 'chess_lineup',lineup)
-			
+			GameRules:GetGameModeEntity().send_status[hero.steam_id] = 1
+			local url = "https://autochess.ppbizon.com/game/post/one/@"..GameRules:GetGameModeEntity().steamidlist.."@"..hero.steam_id.."@"..GameRules:GetGameModeEntity().death_rank.."?hehe="..RandomInt(1,10000).."&duration="..math.floor(GameRules:GetGameTime() - GameRules:GetGameModeEntity().START_TIME)..GetSendKey()
+			GameRules:GetGameModeEntity().send_info[hero.steam_id] = {
+				account_id = hero.steam_id,
+				rank = GameRules:GetGameModeEntity().death_rank,
+				total = PlayerResource:GetPlayerCount(),
+				level = GameRules:GetGameModeEntity().stat_info[hero.steam_id]['mmr_level'],
+				candy = 0,
+				chess = GameRules:GetGameModeEntity().stat_info[hero.steam_id]['chess_lineup'],
+				win_round = GameRules:GetGameModeEntity().stat_info[hero.steam_id]['win_round'],
+				lose_round = GameRules:GetGameModeEntity().stat_info[hero.steam_id]['lose_round'],
+				kills = GameRules:GetGameModeEntity().stat_info[hero.steam_id]['kills'],
+				deaths = GameRules:GetGameModeEntity().stat_info[hero.steam_id]['deaths'],
+				gold = GameRules:GetGameModeEntity().stat_info[hero.steam_id]['gold'],
+				duration = GameRules:GetGameModeEntity().stat_info[hero.steam_id]['duration']
+			}
+			SendHTTP(url.."&from=SyncHP", function(t)
+				if t.err == 0 then
+					local v = t.mmr_info
+					if GameRules:GetGameModeEntity().stat_info[v.userid] ~= nil then
+						prt(v.userid..'eliminated! ranked '..v.rank..'/'..v.total..' level: '..v.level..' candy: '..v.candy)
+						GameRules:GetGameModeEntity().send_info[v.userid]['account_id'] = v.userid
+						GameRules:GetGameModeEntity().send_info[v.userid]['rank'] = v.rank
+						GameRules:GetGameModeEntity().send_info[v.userid]['total'] = v.total
+						GameRules:GetGameModeEntity().send_info[v.userid]['level'] = v.level
+						GameRules:GetGameModeEntity().send_info[v.userid]['candy'] = v.candy or 0
 
-			if GameRules:GetGameModeEntity().already_sent == nil then
-				GameRules:GetGameModeEntity().already_sent = 1
-				prt('END GAME')
-				EmitGlobalSound("DOTAMusic_Diretide_Finale")
-				GameRules:GetGameModeEntity().death_stack = GameRules:GetGameModeEntity().last_player_steamid..','..GameRules:GetGameModeEntity().death_stack
-				if GetMapName() ~= 'practice' then 
-					local url = "https://autochess.ppbizon.com/game/post/@"..GameRules:GetGameModeEntity().death_stack.."?hehe="..RandomInt(1,10000).."&winner_lineup="..lineup.."&duration="..dur..GetSendKey()
-					SendHTTP(url.."&from=SyncHP", function(t)
-						if t.err == 0 then
-							prt('POST GAME OK!')
-							for u,v in pairs(t.mmr_info) do
-								GameRules:GetGameModeEntity().stat_info[u]['mmr_level'] = v.level
-								GameRules:GetGameModeEntity().stat_info[u]['queen_rank'] = v.queen_rank
-								GameRules:GetGameModeEntity().stat_info[u]['candy'] = v.candy or 0
-								GameRules:GetGameModeEntity().stat_info[u]['delta'] = v.delta or 0
+						GameRules:GetGameModeEntity().send_time = {
+							end_time = t.end_time,
+							year = t.year,
+							month = t.month,
+							date = t.date,
+							hour = t.hour,
+							minute = t.minute,
+							second = t.second,
+						}
+					end
+
+				end
+			end)
+		end
+		if GameRules:GetGameModeEntity().death_rank <= 2 and PlayerResource:GetPlayerCount() > 1 then
+			if GameRules:GetGameModeEntity().send_status[GameRules:GetGameModeEntity().last_player_steamid] ~= nil then
+				return
+			end
+			--1st place player
+			GameRules:GetGameModeEntity().send_status[GameRules:GetGameModeEntity().last_player_steamid] = 1
+			local url = "https://autochess.ppbizon.com/game/post/one/@"..GameRules:GetGameModeEntity().steamidlist.."@"..GameRules:GetGameModeEntity().last_player_steamid.."@1?hehe="..RandomInt(1,10000).."&duration="..math.floor(GameRules:GetGameTime() - GameRules:GetGameModeEntity().START_TIME)..GetSendKey()
+			local tt = GameRules:GetGameModeEntity().stat_info[GameRules:GetGameModeEntity().last_player_steamid]
+			GameRules:GetGameModeEntity().send_info[GameRules:GetGameModeEntity().last_player_steamid] = {
+				account_id = GameRules:GetGameModeEntity().last_player_steamid,
+				rank = 1,
+				total = PlayerResource:GetPlayerCount(),
+				level = tt['mmr_level'],
+				candy = 0,
+				chess = tt['chess_lineup'],
+				win_round = tt['win_round'],
+				lose_round = tt['lose_round'],
+				kills = tt['kills'],
+				deaths = tt['deaths'],
+				gold = tt['gold'],
+				duration = tt['duration']
+			}
+			SendHTTP(url.."&from=SyncHP", function(t)
+				if t.err == 0 then
+					local v = t.mmr_info
+					if GameRules:GetGameModeEntity().stat_info[v.userid] ~= nil then
+						prt('1st place '..v.userid..'eliminated! ranked '..v.rank..'/'..v.total..' level: '..v.level..' candy: '..v.candy)
+						GameRules:GetGameModeEntity().send_info[v.userid]['account_id'] = v.userid
+						GameRules:GetGameModeEntity().send_info[v.userid]['rank'] = v.rank
+						GameRules:GetGameModeEntity().send_info[v.userid]['total'] = v.total
+						GameRules:GetGameModeEntity().send_info[v.userid]['level'] = v.level
+						GameRules:GetGameModeEntity().send_info[v.userid]['candy'] = v.candy or 0
+
+						GameRules:GetGameModeEntity().send_time = {
+							end_time = t.end_time,
+							year = t.year,
+							month = t.month,
+							date = t.date,
+							hour = t.hour,
+							minute = t.minute,
+							second = t.second,
+						}
+						local dur = math.floor(GameRules:GetGameTime() - GameRules:GetGameModeEntity().START_TIME)+3
+						SetStat(GameRules:GetGameModeEntity().last_player_hero:GetPlayerID(), 'duration', dur)
+						SetStat(GameRules:GetGameModeEntity().last_player_hero:GetPlayerID(), 'round', GameRules:GetGameModeEntity().battle_round)
+						--保存最终阵容
+						local lineup = ''
+						for _,v in pairs(GameRules:GetGameModeEntity().mychess[last_hero:GetTeam()]) do
+							if v ~= nil and v.chess ~= nil then 
+								lineup = lineup..v.chess..','
 							end
-							local amzdate = string.format(
-							    '%s%s%sT%s%s%sZ',
-							    t.year, t.month, t.date, t.hour, t.minute, t.second
-							)
-							local datestamp = string.format(
-							    '%s%s%s',
-							    t.year, t.month, t.date
-							)
+						end
+						SetStat(last_hero:GetPlayerID(), 'chess_lineup',lineup)
+
+						Timers:CreateTimer(4,function()
+							local ready_2_post = false
+							local ready_1_post = false
+							for y,z in pairs(GameRules:GetGameModeEntity().send_info) do
+								if z.rank == 1 then
+									ready_1_post = true
+								end
+								if z.rank == 2 then
+									ready_2_post = true
+								end
+							end
+							if ready_2_post == true and ready_1_post == true then
+								local t = GameRules:GetGameModeEntity().send_time
+								local amzdate = string.format(
+								    '%s%s%sT%s%s%sZ',
+								    t.year, t.month, t.date, t.hour, t.minute, t.second
+								)
+								local datestamp = string.format(
+								    '%s%s%s',
+								    t.year, t.month, t.date
+								)
+								SendAmazonData(CollectAmazonData(dur),amzdate,datestamp)					
+							end
 							--展示结束面板，结束游戏！
-							Timers:CreateTimer(6,function()
+							Timers:CreateTimer(4,function()
 								GameRules:SetGameWinner(last_hero:GetTeam())
 							end)
-							Timers:CreateTimer(3,function()
+							Timers:CreateTimer(2,function()
 								PostGame()
 							end)
-							SendAmazonData(CollectAmazonData(t,dur),amzdate,datestamp)
-						else
-							prt('POST GAME ERROR : '..t.err)
-							PostGame()
-							Timers:CreateTimer(3,function()
-								GameRules:SetGameWinner(last_hero:GetTeam())
-								
+						end)
+						prt('END GAME')
+						EmitGlobalSound("DOTAMusic_Diretide_Finale")
+
+						--提交阵容
+						if table.maxn(GameRules:GetGameModeEntity().upload_lineup) > 0 then
+							local str = ''
+							for i,v in pairs(GameRules:GetGameModeEntity().upload_lineup) do
+								str = str..json.encode(v)..'|'
+							end
+							str = string.sub(str,1,-2)
+							local url_up = "https://autochess.ppbizon.com/lineup/add?lineups="..str.."&hehe="..RandomInt(1,10000)..GetSendKey()
+							local req_up = CreateHTTPRequestScriptVM("GET", url_up)
+							req_up:SetHTTPRequestAbsoluteTimeoutMS(20000)
+							req_up:Send(function (result)
+								local t_up = json.decode(result["Body"])
+								if t_up.err == 0 then
+									prt('SAVE CLOUD LINEUP OK!')
+								end
 							end)
 						end
-					end, function()
-						prt('POST GAME ERROR')
-						PostGame()
-						Timers:CreateTimer(3,function()
-							GameRules:SetGameWinner(last_hero:GetTeam())
-							
-						end)
-					end)
-				else
-					PostGame()
-					Timers:CreateTimer(5,function()
-						GameRules:SetGameWinner(last_hero:GetTeam())
-						
-					end)
-				end
-
-				--提交阵容
-				if table.maxn(GameRules:GetGameModeEntity().upload_lineup) > 0 then
-					local str = ''
-					for i,v in pairs(GameRules:GetGameModeEntity().upload_lineup) do
-						str = str..json.encode(v)..'|'
 					end
-					str = string.sub(str,1,-2)
-					local url_up = "https://autochess.ppbizon.com/lineup/add?lineups="..str.."&hehe="..RandomInt(1,10000)..GetSendKey()
-					local req_up = CreateHTTPRequestScriptVM("GET", url_up)
-					req_up:SetHTTPRequestAbsoluteTimeoutMS(20000)
-					req_up:Send(function (result)
-						local t_up = json.decode(result["Body"])
-						if t_up.err == 0 then
-							prt('SAVE CLOUD LINEUP OK!')
-						end
-					end)
 				end
-			end
+			end)
 		end
 		if live_count == 0 and PlayerResource:GetPlayerCount() == 1 then
 			EmitGlobalSound("DOTAMusic_Diretide_Finale")
@@ -4854,6 +4938,7 @@ function DropItem(unit)
 			[4] = 'item_miyinchui',
 			[5] = 'item_biaoqiang',
 			[6] = 'item_molifazhang',
+			[7] = 'item_xiaofu',
 		},
 		[3] = {
 			[1] = 'item_emodaofeng',
@@ -6319,6 +6404,16 @@ function ChessAI(u)
 
 
 			--使用物品
+			local bkb_result = TriggerBKB(u)
+			if bkb_result ~= nil and bkb_result > 0 then
+				return bkb_result + ai_delay
+			end
+
+			local renjia_result = TriggerRenjia(u)
+			if renjia_result ~= nil and renjia_result > 0 then
+				return renjia_result + ai_delay
+			end
+
 			local refresh_result = TriggerRefreshOrb(u)
 			if refresh_result ~= nil and refresh_result > 0 then
 				return refresh_result + ai_delay
@@ -6332,11 +6427,6 @@ function ChessAI(u)
 			local sheep_result = TriggerSheepStick(u)
 			if sheep_result ~= nil and sheep_result > 0 then
 				return sheep_result + ai_delay
-			end
-
-			local renjia_result = TriggerRenjia(u)
-			if renjia_result ~= nil and renjia_result > 0 then
-				return renjia_result + ai_delay
 			end
 
 			local dagon_result = TriggerDagon(u)
@@ -7437,6 +7527,9 @@ end
 function AddMaxHPPer(keys)
 	local caster = keys.caster
 	local per = keys.per
+	if caster:IsAncient() == true then
+		return
+	end
 
 	local hp = caster:GetMaxHealth()
 	local hp_per = caster:GetHealth()/caster:GetMaxHealth()
@@ -7669,6 +7762,7 @@ function DAC:OnPlayerChat(keys)
 		tokens[1] == "-refresh" or
 		tokens[1] == "-respawn" or
 		tokens[1] == "dota_create_unit" or 
+		tokens[1] == "-teleport" or 
 		tokens[1] == "-ggsimida"
 		) then
 		if hero ~= nil and hero:IsNull() == false and hero:IsAlive() == true then
@@ -8057,7 +8151,7 @@ function show_damage(keys)
 	end
 	mana_get = RandomInt(mana_get/2,mana_get)
 	
-	if caster:FindModifierByName("modifier_item_jixianfaqiu") ~= nil  then
+	if caster:FindModifierByName("modifier_item_jixianfaqiu") ~= nil or caster:FindModifierByName("modifier_item_tiaodao") ~= nil then
 		mana_get = math.floor(mana_get * 1.25)
 	end
 	if caster:FindModifierByName("modifier_item_yangdao") ~= nil then
@@ -8179,6 +8273,7 @@ function RenJiaDamaged(keys)
 	end
 
 	caster.is_renjia_damaged = true
+	caster.is_bkb_damaged = true
 end
 --电锤技能
 function DianChui(event)
@@ -8561,6 +8656,33 @@ function TriggerRenjia(u)
 				InvisibleUnitCast({
 					caster = u,
 					ability = 'give_renjia_buff',
+					level = 1,
+					unluckydog = u,
+				})
+				ability:StartCooldown(30)
+				return 1
+			end
+		end
+	end
+end
+
+function TriggerBKB(u)
+	if u:FindModifierByName("modifier_item_bkb") == nil then
+		return 
+	end
+	if u.is_bkb_damaged == nil then 
+		return
+	end
+
+	for slot=0,5 do
+		if u:GetItemInSlot(slot)~= nil then
+			local ability = u:GetItemInSlot(slot)
+			local name = ability:GetAbilityName()
+			if name == 'item_bkb' and ability:IsCooldownReady() == true then
+				EmitSoundOn('DOTA_Item.BlackKingBar.Activate',u)
+				InvisibleUnitCast({
+					caster = u,
+					ability = 'give_bkb_buff',
 					level = 1,
 					unluckydog = u,
 				})
@@ -9303,7 +9425,6 @@ function SendHTTP(url, callback, fail_callback)
 	req:SetHTTPRequestAbsoluteTimeoutMS(20000)
 
     req:Send(function(res)
-
         if res.StatusCode ~= 200 or not res.Body then
             if fail_callback ~= nil then
             	fail_callback(obj)
@@ -9781,31 +9902,14 @@ function DAC:OnPreviewEffect(keys)
 	end
 end
 
-function CollectAmazonData(t,dur)
+function CollectAmazonData(dur)
 	local base_data = {
-		version = '0.1',
-	    end_time=t.end_time,
-	    duration=dur,
-	    players={},
+		version = '0.2',
+	    end_time= GameRules:GetGameModeEntity().send_time['end_time'],
+	    duration= dur,
+	    players = GameRules:GetGameModeEntity().send_info,
 	    chess_detail=GameRules:GetGameModeEntity().upload_detail_stat,
 	}
-
-	for user,data in pairs(t.mmr_info) do
-	    local insertdata = {}
-	    insertdata["account_id"] = user
-	    insertdata["rank"] = data.rank
-	    insertdata["total"] = data.total
-	    insertdata["level"] = data.level
-	    insertdata["chess"] = GameRules:GetGameModeEntity().stat_info[user]['chess_lineup']
-	    insertdata["win_round"] = GameRules:GetGameModeEntity().stat_info[user]['win_round']
-	    insertdata["lose_round"] = GameRules:GetGameModeEntity().stat_info[user]['lose_round']
-	    insertdata["kills"] = GameRules:GetGameModeEntity().stat_info[user]['kills']
-	    insertdata["deaths"] = GameRules:GetGameModeEntity().stat_info[user]['deaths']
-	    insertdata["gold"] = GameRules:GetGameModeEntity().stat_info[user]['gold']
-	    insertdata["candy"] = GameRules:GetGameModeEntity().stat_info[user]['candy']
-	    insertdata["duration"] = GameRules:GetGameModeEntity().stat_info[user]['duration']
-	    table.insert(base_data['players'],insertdata)
-	end
 	return base_data
 end
 
@@ -10664,7 +10768,9 @@ function getSignatureKey(key, dateStamp, regionName, serviceName)
     return kSigning
 end
 function SendAmazonData(ctx,amzdate,datestamp)
+	prt('before compress '..#json.encode(ctx))
 	local data_compressed = LibDeflate:CompressDeflate(json.encode(ctx))
+	prt('after compress '..#data_compressed)
 	local data = {
 	  StreamName = "report_reciver",
 	  Data = base64.encode(data_compressed),
@@ -10672,32 +10778,32 @@ function SendAmazonData(ctx,amzdate,datestamp)
 	}
 	local body_data = json.encode(data)
 	
-	local method = 'POST'
-	local service = 'kinesis'
-	local host = 'kinesis.cn-north-1.amazonaws.com.cn'
-	local region = 'cn-north-1'
-	local endpoint = 'https://kinesis.cn-north-1.amazonaws.com.cn'
-	local request_parameters = ""
-	local enc_AWS_ACCESS_KEY_ID = "25E104260341F0B8192CCFA4A909572DCE0898BE77EF35E955F70D67AB5491C5"
-	local AWS_ACCESS_KEY_ID = aeslua.decrypt(GetDedicatedServerKeyV2('bsl,bgbxh'),string.fromhex(enc_AWS_ACCESS_KEY_ID))
-	local access_key = AWS_ACCESS_KEY_ID
-	local enc_AWS_SECRET_ACCESS_KEY = '1321E5E71E43988F4F0CD5A14D15FCD658C2262EE44B2D7007BEA27A6D4A4ECD90FB0A6CAEA410DAD933F423FD9E8EAD'
-	local AWS_SECRET_ACCESS_KEY = aeslua.decrypt(GetDedicatedServerKeyV2('bsl,bgbxh'),string.fromhex(enc_AWS_SECRET_ACCESS_KEY))
-	local secret_key = AWS_SECRET_ACCESS_KEY
-
 	-- local method = 'POST'
 	-- local service = 'kinesis'
-	-- local host = 'kinesis.us-east-2.amazonaws.com'
-	-- local region = 'us-east-2'
-	-- local endpoint = 'https://kinesis.us-east-2.amazonaws.com'
+	-- local host = 'kinesis.cn-north-1.amazonaws.com.cn'
+	-- local region = 'cn-north-1'
+	-- local endpoint = 'https://kinesis.cn-north-1.amazonaws.com.cn'
 	-- local request_parameters = ""
-
-	-- local enc_AWS_ACCESS_KEY_ID = "03FAE7D6D1B989EAD761DFDEE153147317FD60EB75113C7B859D842A31B69E0E"
+	-- local enc_AWS_ACCESS_KEY_ID = "25E104260341F0B8192CCFA4A909572DCE0898BE77EF35E955F70D67AB5491C5"
 	-- local AWS_ACCESS_KEY_ID = aeslua.decrypt(GetDedicatedServerKeyV2('bsl,bgbxh'),string.fromhex(enc_AWS_ACCESS_KEY_ID))
 	-- local access_key = AWS_ACCESS_KEY_ID
-	-- local enc_AWS_SECRET_ACCESS_KEY = '315C8904ECCF3A4ADA7B611D8D153F7D029536A8B090336BB916C83E8F3A763E8CB2F4F0259DA73FDDD61DD7FB11FA9A'
+	-- local enc_AWS_SECRET_ACCESS_KEY = '1321E5E71E43988F4F0CD5A14D15FCD658C2262EE44B2D7007BEA27A6D4A4ECD90FB0A6CAEA410DAD933F423FD9E8EAD'
 	-- local AWS_SECRET_ACCESS_KEY = aeslua.decrypt(GetDedicatedServerKeyV2('bsl,bgbxh'),string.fromhex(enc_AWS_SECRET_ACCESS_KEY))
 	-- local secret_key = AWS_SECRET_ACCESS_KEY
+
+	local method = 'POST'
+	local service = 'kinesis'
+	local host = 'kinesis.us-east-2.amazonaws.com'
+	local region = 'us-east-2'
+	local endpoint = 'https://kinesis.us-east-2.amazonaws.com'
+	local request_parameters = ""
+
+	local enc_AWS_ACCESS_KEY_ID = "03FAE7D6D1B989EAD761DFDEE153147317FD60EB75113C7B859D842A31B69E0E"
+	local AWS_ACCESS_KEY_ID = aeslua.decrypt(GetDedicatedServerKeyV2('bsl,bgbxh'),string.fromhex(enc_AWS_ACCESS_KEY_ID))
+	local access_key = AWS_ACCESS_KEY_ID
+	local enc_AWS_SECRET_ACCESS_KEY = '315C8904ECCF3A4ADA7B611D8D153F7D029536A8B090336BB916C83E8F3A763E8CB2F4F0259DA73FDDD61DD7FB11FA9A'
+	local AWS_SECRET_ACCESS_KEY = aeslua.decrypt(GetDedicatedServerKeyV2('bsl,bgbxh'),string.fromhex(enc_AWS_SECRET_ACCESS_KEY))
+	local secret_key = AWS_SECRET_ACCESS_KEY
 
 	local canonical_uri = '/'
 	local canonical_querystring = request_parameters
@@ -10727,6 +10833,7 @@ function SendAmazonData(ctx,amzdate,datestamp)
         if res.StatusCode ~= 200 or not res.Body then
             return
         end
+        prt('returned ok')
     end)
 end
 
