@@ -519,6 +519,8 @@ function Precache( context )
 		"models/courier/f2p_courier/f2p_courier.vmdl",
 		"models/items/courier/azuremircourierfinal/azuremircourierfinal.vmdl",
 		"effect/roshan_ti9/1.vpcf",
+		"models/items/axe/ti9_jungle_axe/axe_bare.vmdl",
+		"soundevents/custom_sounds.vsndevts",
 	} 
     print("Precache...")
 	local t=table.maxn(mxx)
@@ -1973,6 +1975,7 @@ function DAC:InitGameMode()
 		item_hongzhang_4 = "item_molifazhang;item_molifazhang;item_molifazhang;item_molifazhang;item_wangguan",
 		item_hongzhang_5 = "item_molifazhang;item_molifazhang;item_molifazhang;item_molifazhang;item_molifazhang;item_wangguan",
 		item_kuangzhanfu = "item_zhiliaozhihuan;item_xuwubaoshi",
+		item_bkb = "item_xiaofu;item_miyinchui",
 	}
 end
 function InitHeros()
@@ -2427,6 +2430,7 @@ function DAC:OnPlayerPickHero(keys)
 
 	    if playercount == PlayerResource:GetPlayerCount() then
 	    	Timers:CreateTimer(0.1,function()
+	    		EmitGlobalSound('dac.gamestart')
 	    		InitHeros()
 	    	end)
 	    end 
@@ -2616,7 +2620,9 @@ function StartAPrepareRound()
 
 	if GameRules:GetGameModeEntity().battle_round == 15 then
 		Timers:CreateTimer(5,function()
-			EmitGlobalSound('lycan_lycan_ability_howl_04')
+			-- EmitGlobalSound('lycan_lycan_ability_howl_04')
+			-- EmitGlobalSound('lycan_lycan_ability_howl_04')
+			EmitGlobalSound('warning.wolf')
 		end)
 	end
 
@@ -2772,7 +2778,8 @@ function StartAPrepareRound()
 			if liuju_player_count >= PlayerResource:GetPlayerCount()/2.0 then
 				--流局
 				prt('#txt_liuju_go')
-				EmitGlobalSound("Frostivus.PointScored.Enemy")
+				--EmitGlobalSound("Frostivus.PointScored.Enemy")
+				EmitGlobalSound("dac.liuju")
 				PostGame()
 				Timers:CreateTimer(3,function()
 					GameRules:SetGameWinner(DOTA_TEAM_BADGUYS)
@@ -2926,7 +2933,8 @@ function DAC:OnSuggestLiuju(keys)
 		if liuju_player_count >= math.ceil(PlayerResource:GetPlayerCount()/2) then
 			--流局
 			prt('#txt_liuju_go')
-			EmitGlobalSound("Frostivus.PointScored.Enemy")
+			--EmitGlobalSound("Frostivus.PointScored.Enemy")
+			EmitGlobalSound("dac.liuju")
 			PostGame()
 			Timers:CreateTimer(3,function()
 				GameRules:SetGameWinner(DOTA_TEAM_BADGUYS)
@@ -3610,7 +3618,9 @@ function DAC:OnRequestBuyChess(keys)
 		
 		Timers:CreateTimer(0.3,function()
 			local uu = CreateChessInHand(h,chess,"particles/units/unit_greevil/loot_greevil_death.vpcf")
-			EmitSoundOn("Loot_Drop_Stinger_Rare",uu)
+			--EmitSoundOn("Loot_Drop_Stinger_Rare",uu)
+			-- EmitSoundOn("Loot_Drop_Stinger_Rare",uu)
+			PlayCombineSound(uu)
 			GiveItems2Unit(items_table,uu)
 			--添加星星特效
 			-- play_particle('effect/arrow/star2.vpcf',PATTACH_OVERHEAD_FOLLOW,uu,5)
@@ -3648,7 +3658,9 @@ function TriggerCombineHand(h,chess)
 		local advance_unit_name = chess..'1'
 		Timers:CreateTimer(0.3,function()
 			local uuu = CreateChessInHand(h,advance_unit_name,"particles/units/unit_greevil/loot_greevil_death.vpcf")
-			EmitSoundOn("Loot_Drop_Stinger_Rare",uu)
+			--EmitSoundOn("Loot_Drop_Stinger_Rare",uu)
+			PlayCombineSound(uuu)
+			-- EmitSoundOn("Loot_Drop_Stinger_Rare",uu)
 			GiveItems2Unit(items_table,uuu)
 			--添加星星特效
 			ShowStarsOnChess(uuu)
@@ -4501,6 +4513,9 @@ function CombineChess(u0,u1,u2,combined_chess_name)
 		MakeTiny(uu)
 		MakeMars(uu)
 		PlayChessDialogue(uu,'merge')
+
+		-- EmitSoundOn("Loot_Drop_Stinger_Rare",uu)
+		PlayCombineSound(uu)
 		
 		--给高级棋子添加棋子技能
 		if GameRules:GetGameModeEntity().chess_ability_list[uu:GetUnitName()] ~= nil then
@@ -4541,7 +4556,7 @@ function CombineChess(u0,u1,u2,combined_chess_name)
 		AddAbilityAndSetLevel(uu,'jiaoxie_wudi')
 		--合成特效
 		play_particle("particles/units/unit_greevil/loot_greevil_death.vpcf",PATTACH_ABSORIGIN_FOLLOW,uu,3)
-		EmitSoundOn("Loot_Drop_Stinger_Rare",uu)
+
 
 		GameRules:GetGameModeEntity().population[team_id] = GameRules:GetGameModeEntity().population[team_id] - 1
 		if u2 ~= nil then
@@ -4741,6 +4756,10 @@ function SyncHP(hero)
 						GameRules:GetGameModeEntity().send_info[v.userid]['level'] = v.level
 						GameRules:GetGameModeEntity().send_info[v.userid]['candy'] = v.candy or 0
 
+						GameRules:GetGameModeEntity().stat_info[v.userid]['candy'] = v.candy or 0
+						GameRules:GetGameModeEntity().stat_info[v.userid]['level_delta'] = v.level_delta or 0
+						GameRules:GetGameModeEntity().stat_info[v.userid]['delta'] = v.mmr_delta or 0
+
 						GameRules:GetGameModeEntity().send_time = {
 							end_time = t.end_time,
 							year = t.year,
@@ -4788,6 +4807,10 @@ function SyncHP(hero)
 						GameRules:GetGameModeEntity().send_info[v.userid]['level'] = v.level
 						GameRules:GetGameModeEntity().send_info[v.userid]['candy'] = v.candy or 0
 
+						GameRules:GetGameModeEntity().stat_info[v.userid]['candy'] = v.candy or 0
+						GameRules:GetGameModeEntity().stat_info[v.userid]['level_delta'] = v.level_delta or 0
+						GameRules:GetGameModeEntity().stat_info[v.userid]['delta'] = v.mmr_delta or 0
+
 						GameRules:GetGameModeEntity().send_time = {
 							end_time = t.end_time,
 							year = t.year,
@@ -4820,6 +4843,15 @@ function SyncHP(hero)
 									ready_2_post = true
 								end
 							end
+							
+							--展示结束面板，结束游戏！
+							Timers:CreateTimer(6,function()
+								GameRules:SetGameWinner(last_hero:GetTeam())
+							end)
+							Timers:CreateTimer(3,function()
+								PostGame()
+							end)
+
 							if ready_2_post == true and ready_1_post == true then
 								local t = GameRules:GetGameModeEntity().send_time
 								local amzdate = string.format(
@@ -4832,13 +4864,6 @@ function SyncHP(hero)
 								)
 								SendAmazonData(CollectAmazonData(dur),amzdate,datestamp)					
 							end
-							--展示结束面板，结束游戏！
-							Timers:CreateTimer(4,function()
-								GameRules:SetGameWinner(last_hero:GetTeam())
-							end)
-							Timers:CreateTimer(2,function()
-								PostGame()
-							end)
 						end)
 						prt('END GAME')
 						EmitGlobalSound("DOTAMusic_Diretide_Finale")
@@ -4861,11 +4886,14 @@ function SyncHP(hero)
 							end)
 						end
 					end
+				else
+					prt('错误：'..t.err)
 				end
 			end)
 		end
 		if live_count == 0 and PlayerResource:GetPlayerCount() == 1 then
-			EmitGlobalSound("DOTAMusic_Diretide_Finale")
+			--EmitGlobalSound("DOTAMusic_Diretide_Finale")
+			EmitGlobalSound("dac.gameover")
 			PostGame()
 			Timers:CreateTimer(3,function()
 				GameRules:SetGameWinner(DOTA_TEAM_NEUTRALS)
@@ -6853,7 +6881,7 @@ function IsGridCanAttackEnemy(x,y,u)
 	local attack_range = u:Script_GetAttackRange() or 210
 	--遍历所有单位
 	for _,enemy in pairs (GameRules:GetGameModeEntity().to_be_destory_list[team_id]) do
-		if enemy.team_id ~= u.team_id and enemy:IsInvisible() == false and (XY2Vector(x,y,team_id) - enemy:GetAbsOrigin()):Length2D() < attack_range - enemy:GetHullRadius() then
+		if enemy.team_id ~= u.team_id and enemy:IsInvisible() == false and (XY2Vector(x,y,team_id) - enemy:GetAbsOrigin()):Length2D() < attack_range + enemy:GetHullRadius() + u:GetHullRadius() then
 			return true
 		end
 	end
@@ -6915,7 +6943,7 @@ function FindFarthestUnluckyDogAvailablePosition(u)
 				for i=8,1,-1 do
 					if GameRules:GetGameModeEntity().unit[team_id][j..'_'..i] == nil then
 						for _,unit in pairs (GameRules:GetGameModeEntity().to_be_destory_list[team_id]) do
-							if unit.team_id ~= u.team_id and (XY2Vector(i,j,team_id) - XY2Vector(unit.x,unit.y,team_id)):Length2D() < u:Script_GetAttackRange() - unit:GetHullRadius() then
+							if unit.team_id ~= u.team_id and (XY2Vector(i,j,team_id) - XY2Vector(unit.x,unit.y,team_id)):Length2D() < u:Script_GetAttackRange() + u:GetHullRadius() + unit:GetHullRadius() then
 								return XY2Vector(i,j,team_id)
 							end
 						end
@@ -6927,7 +6955,7 @@ function FindFarthestUnluckyDogAvailablePosition(u)
 				for i=1,8 do
 					if GameRules:GetGameModeEntity().unit[team_id][j..'_'..i] == nil then
 						for _,unit in pairs (GameRules:GetGameModeEntity().to_be_destory_list[team_id]) do
-							if unit.team_id ~= u.team_id and (XY2Vector(i,j,team_id) - XY2Vector(unit.x,unit.y,team_id)):Length2D() < u:Script_GetAttackRange() - unit:GetHullRadius() then
+							if unit.team_id ~= u.team_id and (XY2Vector(i,j,team_id) - XY2Vector(unit.x,unit.y,team_id)):Length2D() < u:Script_GetAttackRange() + u:GetHullRadius() + unit:GetHullRadius() then
 								return XY2Vector(i,j,team_id)
 							end
 						end
@@ -7137,7 +7165,7 @@ function FindUnluckyDog190(u)
 	local try_count = 0
 	while unluckydog == nil and try_count < 100 do
 		local uu = GameRules:GetGameModeEntity().to_be_destory_list[u.at_team_id or u.team_id][RandomInt(1,table.maxn(GameRules:GetGameModeEntity().to_be_destory_list[u.at_team_id or u.team_id]))]
-		if uu ~= nil and uu:IsNull() == false and uu:IsAlive() == true and uu.team_id ~= u.team_id and (uu:GetAbsOrigin()-u:GetAbsOrigin()):Length2D() < 205 - uu:GetHullRadius() then
+		if uu ~= nil and uu:IsNull() == false and uu:IsAlive() == true and uu.team_id ~= u.team_id and (uu:GetAbsOrigin()-u:GetAbsOrigin()):Length2D() < 205 + u:GetHullRadius() + uu:GetHullRadius() then
 			unluckydog = uu
 		end
 		try_count = try_count + 1
@@ -7149,7 +7177,7 @@ function FindUnluckyDog250(u)
 	local try_count = 0
 	while unluckydog == nil and try_count < 100 do
 		local uu = GameRules:GetGameModeEntity().to_be_destory_list[u.at_team_id or u.team_id][RandomInt(1,table.maxn(GameRules:GetGameModeEntity().to_be_destory_list[u.at_team_id or u.team_id]))]
-		if uu ~= nil and uu:IsNull() == false and uu:IsAlive() == true and uu.team_id ~= u.team_id and (uu:GetAbsOrigin()-u:GetAbsOrigin()):Length2D() < 250 - uu:GetHullRadius() then
+		if uu ~= nil and uu:IsNull() == false and uu:IsAlive() == true and uu.team_id ~= u.team_id and (uu:GetAbsOrigin()-u:GetAbsOrigin()):Length2D() < 205 + u:GetHullRadius() + uu:GetHullRadius() then
 			unluckydog = uu
 		end
 		try_count = try_count + 1
@@ -7729,7 +7757,7 @@ function GameOver()
 		end
 
 		GameRules:GetGameModeEntity().ended = true
-		EmitGlobalSound("Loot_Drop_Stinger_Arcana")
+		-- EmitGlobalSound("Loot_Drop_Stinger_Arcana")
 
 		GameRules:SendCustomMessage('gameover',0,0)
 
@@ -9084,14 +9112,13 @@ function FindAClosestEnemyAndAttack(u)
 		return 1
 	end
 
-
 	--已经有目标
-	if u.attack_target ~= nil and u.attack_target:IsNull() == false and u.attack_target:IsInvisible() == false and u.attack_target:IsAlive() == true and (u.attack_target:GetAbsOrigin() - u:GetAbsOrigin()):Length2D() < u:Script_GetAttackRange() - u.attack_target:GetHullRadius() then
+	if u.attack_target ~= nil and u.attack_target:IsNull() == false and u.attack_target:IsInvisible() == false and u.attack_target:IsAlive() == true and (u.attack_target:GetAbsOrigin() - u:GetAbsOrigin()):Length2D() < u:Script_GetAttackRange() + u.attack_target:GetHullRadius() + u:GetHullRadius() then
 		local newOrder = {
 	 		UnitIndex = u:entindex(), 
 	 		OrderType = DOTA_UNIT_ORDER_ATTACK_TARGET,
 	 		TargetIndex = u.attack_target:entindex(), 
-	 		Queue = 0 
+	 		Queue = 1 
 	 	}
 		ExecuteOrderFromTable(newOrder)
 		return 1
@@ -9106,7 +9133,7 @@ function FindAClosestEnemyAndAttack(u)
 		if v ~= nil and v:IsNull() == false and v:IsAlive() == true then
 			if v.team_id ~= u.team_id and v:IsInvisible() == false then
 				local d = (v:GetAbsOrigin() - u:GetAbsOrigin()):Length2D()
-				if d < closest_distance and d < attack_range - v:GetHullRadius() then
+				if d < closest_distance and d < attack_range + v:GetHullRadius() + u:GetHullRadius() then
 					closest_enemy = v
 					closest_distance = d
 				end
@@ -9120,7 +9147,7 @@ function FindAClosestEnemyAndAttack(u)
 	 		UnitIndex = u:entindex(), 
 	 		OrderType = DOTA_UNIT_ORDER_ATTACK_TARGET,
 	 		TargetIndex = closest_enemy:entindex(), 
-	 		Queue = 0 
+	 		Queue = 1 
 	 	}
 		ExecuteOrderFromTable(newOrder)
 		return 1
@@ -9902,8 +9929,10 @@ function DAC:OnPreviewEffect(keys)
 	end
 end
 
+
 function CollectAmazonData(dur)
 	local base_data = {
+
 		version = '0.2',
 	    end_time= GameRules:GetGameModeEntity().send_time['end_time'],
 	    duration= dur,
@@ -10768,9 +10797,7 @@ function getSignatureKey(key, dateStamp, regionName, serviceName)
     return kSigning
 end
 function SendAmazonData(ctx,amzdate,datestamp)
-	prt('before compress '..#json.encode(ctx))
 	local data_compressed = LibDeflate:CompressDeflate(json.encode(ctx))
-	prt('after compress '..#data_compressed)
 	local data = {
 	  StreamName = "report_reciver",
 	  Data = base64.encode(data_compressed),
@@ -10812,6 +10839,7 @@ function SendAmazonData(ctx,amzdate,datestamp)
 	local payload_hash = sha2.sha256(body_data)
 	local canonical_request = method..'\n'..canonical_uri..'\n'..canonical_querystring..'\n'.. canonical_headers..'\n'..signed_headers..'\n'..payload_hash
 
+
 	local algorithm = 'AWS4-HMAC-SHA256'
 	local credential_scope = datestamp..'/'..region..'/'..service..'/'..'aws4_request'
 	local string_to_sign = algorithm..'\n'..amzdate..'\n'..credential_scope..'\n'..sha2.sha256(canonical_request)
@@ -10823,6 +10851,7 @@ function SendAmazonData(ctx,amzdate,datestamp)
 
 	local request_url = endpoint..'/'
 
+
 	local req = CreateHTTPRequestScriptVM("POST",request_url)
     req:SetHTTPRequestHeaderValue("x-amz-date", amzdate)
     req:SetHTTPRequestHeaderValue("Content-Type", "application/x-amz-json-1.1")
@@ -10831,9 +10860,9 @@ function SendAmazonData(ctx,amzdate,datestamp)
     req:SetHTTPRequestRawPostBody("application/x-amz-json-1.1",body_data)
     req:Send(function(res)
         if res.StatusCode ~= 200 or not res.Body then
+        	prt('returned')
             return
         end
-        prt('returned ok')
     end)
 end
 
@@ -10960,4 +10989,15 @@ function ShallowGrave(keys)
 			end)
 		end
 	end
+end
+
+function PlayCombineSound(u)
+	local level = u:GetLevel()
+	if level == nil or level < 3 then
+		level = 3
+	end
+	if level >9 then
+		level = 9
+	end
+	EmitSoundOn("dac.combine."..level,u)
 end

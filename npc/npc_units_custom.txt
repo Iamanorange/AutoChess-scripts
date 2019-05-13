@@ -2917,27 +2917,27 @@
 			{
 				"Wearable1"
 				{
-					"ItemDef"	"9207"
+					"ItemDef"	"12733"
 				}
 				"Wearable2"
 				{
-					"ItemDef"	"9506"
+					"ItemDef"	"7466"
 				}
 				"Wearable3"
 				{
-					"ItemDef"	"9507"
+					"ItemDef"	"12734"
 				}
 				"Wearable4"
 				{
-					"ItemDef"	"9508"
+					"ItemDef"	"8068"
 				}
 				"Wearable5"
 				{
-					"ItemDef"	"7466"
+					"ItemDef"	"12735"
 				}
 				"Wearable6"
 				{
-					"ItemDef"	"9509"
+					"ItemDef"	"12737"
 				}
 			}
 		}
@@ -10052,7 +10052,7 @@
 		// Class of entity of link to.
 		"BaseClass"	"npc_dota_creature"
 		"Model"	"models/heroes/drow/drow_base.vmdl"
-		"ModelScale"	"0.85"
+		"ModelScale"	"0.88"
 		// Abilities
 		// ----------------------------------------------------------------
 		// Ability 1.
@@ -10131,31 +10131,31 @@
 			{
 				"Wearable1"
 				{
-					"ItemDef"	"8148"
+					"ItemDef"	"7242"
 				}
 				"Wearable2"
 				{
-					"ItemDef"	"8006"
+					"ItemDef"	"7243"
 				}
 				"Wearable3"
 				{
-					"ItemDef"	"5386"
+					"ItemDef"	"7246"
 				}
 				"Wearable4"
 				{
-					"ItemDef"	"8146"
+					"ItemDef"	"7232"
 				}
 				"Wearable5"
 				{
-					"ItemDef"	"8152"
+					"ItemDef"	"7244"
 				}
 				"Wearable6"
 				{
-					"ItemDef"	"8151"
+					"ItemDef"	"5386"
 				}
 				"Wearable7"
 				{
-					"ItemDef"	"8150"
+					"ItemDef"	"7245"
 				}
 			}
 		}
@@ -10259,31 +10259,31 @@
 			{
 				"Wearable1"
 				{
-					"ItemDef"	"7242"
+					"ItemDef"	"12908"
 				}
 				"Wearable2"
 				{
-					"ItemDef"	"12946"
+					"ItemDef"	"8035"
 				}
 				"Wearable3"
 				{
-					"ItemDef"	"7232"
+					"ItemDef"	"12902"
 				}
 				"Wearable4"
 				{
-					"ItemDef"	"7246"
+					"ItemDef"	"12905"
 				}
 				"Wearable5"
 				{
-					"ItemDef"	"7244"
+					"ItemDef"	"12903"
 				}
 				"Wearable6"
 				{
-					"ItemDef"	"6785"
+					"ItemDef"	"12946"
 				}
 				"Wearable7"
 				{
-					"ItemDef"	"8037"
+					"ItemDef"	"6785"
 				}
 			}
 		}
@@ -30995,7 +30995,7 @@
 		"AttackDamageMin"	"0"
 		"AttackDamageMax"	"0"
 		"AttackRate"	"1.4"
-		"AttackRange"	"250"
+		"AttackRange"	"205"
 		"Creature"
 		{
 			"AttachWearables"
@@ -31118,7 +31118,7 @@
 		"AttackDamageMin"	"0"
 		"AttackDamageMax"	"0"
 		"AttackRate"	"1.4"
-		"AttackRange"	"250"
+		"AttackRange"	"205"
 		"Creature"
 		{
 			"AttachWearables"
@@ -31239,7 +31239,7 @@
 		"AttackDamageMin"	"0"
 		"AttackDamageMax"	"0"
 		"AttackRate"	"1.4"
-		"AttackRange"	"250"
+		"AttackRange"	"205"
 		"Creature"
 		{
 			"AttachWearables"
