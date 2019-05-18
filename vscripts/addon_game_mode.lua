@@ -748,7 +748,6 @@ function DAC:InitGameMode()
     ListenToGameEvent("entity_killed", Dynamic_Wrap(DAC, "OnEntityKilled"), self)
     ListenToGameEvent("dota_player_gained_level", Dynamic_Wrap(DAC,"OnPlayerGainedLevel"), self)
 
-
     CustomGameEventManager:RegisterListener("request_buy_chess", Dynamic_Wrap(DAC, "OnRequestBuyChess") )
     CustomGameEventManager:RegisterListener("pick_chess_position", Dynamic_Wrap(DAC, "OnPickChessPosition") )
     CustomGameEventManager:RegisterListener("cancel_pick_chess_position", Dynamic_Wrap(DAC, "OnCancelPickChessPosition") )
@@ -763,6 +762,8 @@ function DAC:InitGameMode()
     CustomGameEventManager:RegisterListener("set_auto_combine", Dynamic_Wrap(DAC, "OnSetAutoCombine") )
     CustomGameEventManager:RegisterListener("select_difficulty", Dynamic_Wrap(DAC, "OnSelectDifficulty") )
     CustomGameEventManager:RegisterListener("request_pause_game", Dynamic_Wrap(DAC, "OnPauseGame") )
+    CustomGameEventManager:RegisterListener("request_select_chess", Dynamic_Wrap(DAC, "OnRequestSelectChess") )
+
 
     GameRules:GetGameModeEntity().battle_round = 1
     GameRules:GetGameModeEntity().pilao_round = 50
@@ -2998,7 +2999,6 @@ function RestoreARound(teamid)
 				prepare_riki = true
 			end
 			MakeTiny(x)
-			MakeMars(x)
 			table.insert(GameRules:GetGameModeEntity().to_be_destory_list[teamid],x)
 			x:SetForwardVector(Vector(0,1,0))
 			AddAbilityAndSetLevel(x,'root_self')
@@ -3705,7 +3705,6 @@ function CreateChessInHand(h,chess,particle)
 		return
 	end
 	MakeTiny(x)
-	MakeMars(x)
 	PlayChessDialogue(x,'spawn')
 
 	GameRules:GetGameModeEntity().hand[team_id][index] = 1
@@ -4019,10 +4018,30 @@ function DAC:OnPickChessPosition(keys)
 	if origin_x == x and origin_y == y then
 		return
 	end
-	--要放回手牌
+	--目标点是手牌
 	if CheckTargetPosInHand(p,team_id) ~= false then
 		if picked_chess.hand_index ~= nil then
-			CancelPickChess(caster)
+			--更换手牌位置
+			local target_index = CheckTargetPosInHand(p,team_id)
+			local curr_index = picked_chess.hand_index
+			GameRules:GetGameModeEntity().hand[team_id][curr_index] = 0
+			GameRules:GetGameModeEntity().hand[team_id][target_index] = 1
+			if caster.hand_entities == nil then
+				caster.hand_entities = {}
+			end
+			caster.hand_entities[curr_index] = nil
+			caster.hand_entities[target_index] = picked_chess
+			picked_chess.hand_index = target_index
+
+			picked_chess:SetForwardVector((HandIndex2Vector(team_id,target_index)- picked_chess:GetAbsOrigin()):Normalized())
+			BlinkChessX({p=HandIndex2Vector(team_id,target_index),caster=picked_chess})
+
+
+			--隐藏手牌
+			FindRikiAndToggle(picked_chess)
+			Timers:CreateTimer(1,function()
+				TriggerCombineHand(caster,picked_chess:GetUnitName())
+			end)
 			return
 		end
 		local target_index = CheckTargetPosInHand(p,team_id)
@@ -4062,6 +4081,7 @@ function DAC:OnPickChessPosition(keys)
 
 		--隐藏手牌
 		FindRikiAndToggle(picked_chess)
+
 		--同步ui人口
 		CustomGameEventManager:Send_ServerToTeam(team_id,"population",{
 			key = GetClientKey(team_id),
@@ -4517,7 +4537,6 @@ function CombineChess(u0,u1,u2,combined_chess_name)
 		--造高级棋子
 		local uu = CreateUnitByName(advance_unit_name, p,false,nil,nil,team_id) 
 		MakeTiny(uu)
-		MakeMars(uu)
 		PlayChessDialogue(uu,'merge')
 
 		-- EmitSoundOn("Loot_Drop_Stinger_Rare",uu)
@@ -4630,7 +4649,7 @@ function SyncHP(hero)
 	if GameRules:GetGameModeEntity().START_TIME == nil then
 		return
 	end
-	SetStat(hero:GetPlayerID(), 'duration', math.floor(GameRules:GetGameTime() - GameRules:GetGameModeEntity().START_TIME))
+	SetStat(hero:GetPlayerID(), 'duration', GameRules:GetGameTime() - GameRules:GetGameModeEntity().START_TIME)
 	SetStat(hero:GetPlayerID(), 'round', GameRules:GetGameModeEntity().battle_round)
 	if hero:GetHealth() <= 0 then
 		--玩家死亡
@@ -4842,7 +4861,7 @@ function SyncHP(hero)
 							minute = t.minute,
 							second = t.second,
 						}
-						local dur = math.floor(GameRules:GetGameTime() - GameRules:GetGameModeEntity().START_TIME)+3
+						local dur = GameRules:GetGameTime() - GameRules:GetGameModeEntity().START_TIME+3
 						SetStat(GameRules:GetGameModeEntity().last_player_hero:GetPlayerID(), 'duration', dur)
 						SetStat(GameRules:GetGameModeEntity().last_player_hero:GetPlayerID(), 'round', GameRules:GetGameModeEntity().battle_round)
 						--保存最终阵容
@@ -6301,7 +6320,6 @@ function MirrorAChess(teamid,i,j,opp)
 	Timers:CreateTimer(RandomFloat(0.1,0.7),function()
 		local x = CreateUnitByName(GameRules:GetGameModeEntity().mychess[teamid][i..'_'..j].chess,XY2Vector(9-j,9-i,opp),true,nil,nil,DOTA_TEAM_NEUTRALS)
 		MakeTiny(x)
-		MakeMars(x)
 		x:SetForwardVector(Vector(0,-1,0))
 
 		x.y_x = (9-i)..'_'..(9-j)
@@ -7176,7 +7194,7 @@ function FindHighLevelUnluckyDog(u)
 		local a = GameRules:GetGameModeEntity().chess_ability_list[unit:GetUnitName()]
 		local beh = GameRules:GetGameModeEntity().ability_behavior_list[a]
 
-		if lv > max_level and unit.team_id ~= u.team_id and unit:FindModifierByName("modifier_doom_bringer_doom") == nil and beh ~= 0 then
+		if lv > max_level and unit.team_id ~= u.team_id and unit:FindModifierByName("modifier_doom_bringer_doom") == nil and unit:FindModifierByName("modifier_shadow_shaman_voodoo") == nil and unit:FindModifierByName("modifier_lion_voodoo") == nil and beh ~= 0 then
 			unluckydog = unit
 			max_level = lv
 		end
@@ -8856,7 +8874,7 @@ function TriggerFrogGua(u)
 	if u:FindAbilityByName("frog_voodoo") == nil then
 		return 
 	end
-	local dog = FindUnluckyDog(u)
+	local dog = FindHighLevelUnluckyDog(u)
 	if dog ~= nil and u:FindAbilityByName("frog_voodoo"):IsCooldownReady() == true then
 		local newOrder = {
 	 		UnitIndex = u:entindex(), 
@@ -9712,7 +9730,7 @@ function play_particle_controlIndex(p, pos, u, d, controlIndex)
 end
 
 function MakeTiny(x)
-	if x==nil or x:IsNull() == true or x:IsAlive() == false then
+	if not IsUnitExist(x) then
 		return
 	end
 	if x:GetUnitName() == 'chess_tiny11' then
@@ -9735,12 +9753,6 @@ function MakeTiny(x)
 		x.part4 = SpawnEntityFromTableSynchronous('prop_dynamic',{model="models/items/tiny/scarletquarry_offhand_t2/scarletquarry_offhand_t2.vmdl"})
 		x.part4:FollowEntity(x,true)
 	end
-end
-
-function MakeMars(x)
-	if not IsUnitExist(x) then
-		return
-	end
 	if x:GetUnitName() == 'chess_mars11' then
 		PlayParticleOnUnitUntilDeath({
 			caster = x,
@@ -9753,7 +9765,16 @@ function MakeMars(x)
 			p = "effect/mars/1/e.vpcf",
 		})
 	end
+	if x:GetUnitName() == 'chess_viper11' then
+		x.part1 = SpawnEntityFromTableSynchronous('prop_dynamic',{model="models/items/viper/venom_source_machinery_back/venom_source_machinery_back.vmdl"})
+		x.part1:FollowEntity(x,true)
+		x.part2 = SpawnEntityFromTableSynchronous('prop_dynamic',{model="models/items/viper/venom_source_machinery_head/venom_source_machinery_head.vmdl"})
+		x.part2:FollowEntity(x,true)
+		x.part3 = SpawnEntityFromTableSynchronous('prop_dynamic',{model="models/items/viper/venom_source_machinery_tail/venom_source_machinery_tail.vmdl"})
+		x.part3:FollowEntity(x,true)
+	end
 end
+
 
 function TinyTouzhi(keys)
 	local p = keys.target_points[1]
@@ -10961,6 +10982,23 @@ function SendAmazonData(ctx,amzdate,datestamp)
             return
         end
     end)
+end
+
+function DAC:OnRequestSelectChess(keys)
+	local player_id = keys.PlayerID
+	local hero = GameRules:GetGameModeEntity().playerid2hero[player_id]
+	local unit_index = keys.unit_index
+	local unit = EntIndexToHScript(unit_index)
+
+	if hero:FindAbilityByName('pick_chess') ~= nil then
+		ExecuteOrderFromTable({
+			UnitIndex = hero:entindex(), 
+			OrderType = DOTA_UNIT_ORDER_CAST_TARGET,
+			TargetIndex = unit_index,
+			AbilityIndex = hero:FindAbilityByName('pick_chess'):entindex(),
+			Queue = 0
+		})
+	end
 end
 
 function DAC:OnPauseGame(keys)
